@@ -48,7 +48,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Kotlin.com.hizamakura.array2.Array2dKt">
+  <component name="RunManager">
     <configuration name="Array1d" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="Array1d" />
       <module name="Week 5" />
@@ -56,8 +56,8 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="Array2d" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="com.hizamakura.array2.Array2d" />
+    <configuration name="MagicSquareGenerate" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.hizamakura.array2.MagicSquareGenerate" />
       <module name="Week 5" />
       <extension name="coverage">
         <pattern>
@@ -117,8 +117,8 @@
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Application.MagicSquareGenerate" />
         <item itemvalue="Kotlin.com.hizamakura.array2.Array2dKt" />
-        <item itemvalue="Application.Array2d" />
         <item itemvalue="Application.Array1d" />
         <item itemvalue="Kotlin.Array1dKt" />
         <item itemvalue="Kotlin.Array2dKt" />
@@ -138,7 +138,10 @@
       <workItem from="1566951380942" duration="741000" />
       <workItem from="1566952178824" duration="19178000" />
       <workItem from="1566971651759" duration="674000" />
-      <workItem from="1566972934251" duration="1026000" />
+      <workItem from="1566972934251" duration="1624000" />
+      <workItem from="1567034564635" duration="199000" />
+      <workItem from="1567123442705" duration="1718000" />
+      <workItem from="1567555794574" duration="13346000" />
     </task>
     <servers />
   </component>
@@ -157,5 +160,10 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/Week_5$Array2d.ic" NAME="Array2d Coverage Results" MODIFIED="1567559340012" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
+      <FILTER>com.hizamakura.array2.*</FILTER>
+    </SUITE>
   </component>
 </project>
