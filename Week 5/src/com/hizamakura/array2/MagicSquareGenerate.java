@@ -2,6 +2,7 @@ package com.hizamakura.array2;
 
 import java.util.Arrays;
 import java.util.Scanner;
+import java.util.stream.IntStream;
 
 public class MagicSquareGenerate {
     static Scanner in = new Scanner(System.in);
@@ -11,14 +12,14 @@ public class MagicSquareGenerate {
         int n = prompt("Input magic square size", Integer::parseInt);
         var magicSquare = generateMagicSquare(n);
         for (var row : magicSquare) {
-            println(join(", ", 3, row));
+            println(join(" ", getHighestInt(magicSquare), row));
         }
     }
 
 
     public static int[][] generateMagicSquare(int size) {
         var n = size;
-        int[][] magicSquare = new int[n][n];
+        int[][] magicSquare = new int[n + 1][n + 1];
 
         // Initialize position for 1
         int r = 0;
@@ -53,7 +54,36 @@ public class MagicSquareGenerate {
                 r = n - 1;
         }
 
+        // Sum rows, columns, and corners.
+        int corner = 0;
+        for (int i = 0; i < size; i++) {
+            var row = Arrays.stream(magicSquare[i]).sum();
+            magicSquare[i][size] = row;
+
+            var col = Arrays.stream(getColumn(magicSquare, i, 0)).sum();
+            magicSquare[size][i] = col;
+
+            corner += magicSquare[i][i];
+        }
+        magicSquare[size][size] = corner;
+
         return magicSquare;
+    }
+
+    public static int getHighestInt(int[][] matrix) {
+        var highest = 0;
+        for (var row : matrix) {
+            for (var value : row) {
+                highest = value > highest ? value : highest;
+            }
+        }
+        return highest;
+    }
+
+    public static int[] getColumn(int[][] matrix, int column, int defaultVal) {
+        return IntStream.range(0, matrix.length)
+                .map(i -> matrix[i].length < column ? defaultVal : matrix[i][column])
+                .toArray();
     }
 
     public static String join(int[] array, int pad) {
