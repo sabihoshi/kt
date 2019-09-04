@@ -2,74 +2,55 @@ package com.hizamakura.array2;
 
 import java.util.Arrays;
 import java.util.Scanner;
-import java.util.stream.Collectors;
 
-public class Array2d {
+public class MagicSquareGenerate {
     static Scanner in = new Scanner(System.in);
 
     public static void main(String[] args) {
-        // input n
-        int rows = prompt("Input rows", Integer::parseInt);
-        int columns = prompt("Input columns", Integer::parseInt);
-
-        var matrix = new int[rows][columns];
-
-        // input values
-        for (int i = 0; i < matrix.length; i++) {
-            matrix[i] = promptArr("", columns);
-        }
-
-        println("Return");
-        // return values
-        for (var row : matrix) {
-            println(join(" ", 3, row));
-        }
-
         println("Magic square");
-        var magicSquare = generateMagicSquare(3);
-        for(var row: magicSquare) {
-            println(join(" ", 3, row));
+        int n = prompt("Input magic square size", Integer::parseInt);
+        var magicSquare = generateMagicSquare(n);
+        for (var row : magicSquare) {
+            println(join(", ", 3, row));
         }
     }
+
 
     public static int[][] generateMagicSquare(int size) {
         var n = size;
         int[][] magicSquare = new int[n][n];
 
         // Initialize position for 1
-        int r = n / 2;
-        int c = n - 1;
+        int r = 0;
+        int c = n / 2;
 
-        // One by one put all values in magic square
+        // Generate all values in square
         for (int num = 1; num <= n * n; ) {
-            if (r == -1 && c == n) //3rd condition
-            {
-                c = n - 2;
-                r = 0;
-            } else {
-                //1st condition helper if next number
-                // goes to out of square's right side
-                if (c == n)
-                    c = 0;
-
-                //1st condition helper if next number is
-                // goes to out of square's upper side
-                if (r < 0)
-                    r = n - 1;
+            // Next position has a value
+            if (magicSquare[r][c] != 0) {
+                c--;
+                r += 2;
             }
 
-            //2nd condition
-            if (magicSquare[r][c] != 0) {
-                c -= 2;
-                r++;
-                continue;
-            } else
-                //set number
-                magicSquare[r][c] = num++;
+            // Set the value
+            magicSquare[r][c] = num++;
 
-            // move upwards right
+            // Move upwards right
             c++;
             r--;
+
+            if (c == n && r == -1) {
+                c--;
+                r += 2;
+            }
+
+            // Right side
+            if (c == n)
+                c = 0;
+
+            // Top side
+            if (r < 0)
+                r = n - 1;
         }
 
         return magicSquare;
@@ -89,9 +70,9 @@ public class Array2d {
 
     public static String join(String delimiter, int pad, int[] array) {
         var sb = new StringBuilder();
-        for(int i = 0; i < array.length; i++) {
+        for (int i = 0; i < array.length; i++) {
             sb.append(padLeft(String.valueOf(array[i]), pad));
-            if(i != array.length - 1)
+            if (i != array.length - 1)
                 sb.append(delimiter);
         }
         return sb.toString();
