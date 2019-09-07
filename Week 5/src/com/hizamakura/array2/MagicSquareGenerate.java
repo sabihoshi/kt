@@ -11,8 +11,9 @@ public class MagicSquareGenerate {
         println("Magic square");
         int n = prompt("Input magic square size", Integer::parseInt);
         var magicSquare = generateMagicSquare(n);
+        var widest = String.valueOf(getHighestInt(magicSquare)).length();
         for (var row : magicSquare) {
-            println(join(" ", getHighestInt(magicSquare), row));
+            println(join(" ", widest, row));
         }
     }
 

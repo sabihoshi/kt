@@ -40,8 +40,9 @@ public class MagicSquareCheck {
         matrix[size][size] = diagSum;
 
         println("Result");
+        var widest = String.valueOf(getHighestInt(magicSquare)).length();
         for (var row : matrix) {
-            println(join(" ", getHighestInt(matrix), row));
+            println(join(" ", widest, row));
         }
 
         if (isAllEqual(sums))
