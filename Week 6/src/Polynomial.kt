@@ -1,8 +1,28 @@
+import kotlin.math.abs
+
 fun main() {
     val maxDeg = promptInt("Input highest degree")
     val nums = promptArr("Numeric Coefficients", maxDeg) { it.toInt() }
 
-    val polynomials = nums.withIndex().map { (index, num) -> "${num}x^${index}"}
+    val polynomials = nums.withIndex()
+        .filter { (i, n) -> n != 0 }
+        .map { (i, n) ->
+            if (abs(n) == 1 && i == 0) n
+            else {
+                val base =
+                    if (n < 0 && abs(n) == 1) "-"
+                    else "$n"
+
+                val degree =
+                    when (i) {
+                        0 -> ""
+                        1 -> "x"
+                        else -> "x^$i"
+                    }
+
+                "$base$degree"
+            }
+        }
     print(polynomials.joinToString(" + "))
 }
 
