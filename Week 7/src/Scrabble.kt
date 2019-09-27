@@ -1,25 +1,21 @@
 import java.io.IOException
 import java.util.*
 import java.util.concurrent.ThreadLocalRandom
+import java.io.File
+import java.io.InputStream
 
 enum class Direction {
     Down,
     Across
 }
 
-fun checkBoard(): Int {
-    // return 0 if there is no winner
-    // 1 for 1st player
-    // 2 for 2nd player
-    throw NotImplementedError()
-}
+private const val BOARD_SIZE = 15
+private const val RACK_SIZE = 7
 
 private val rnd = ThreadLocalRandom.current()
-
-internal var currentPlayer = 0
-internal var maxPlayers = 4
-internal val `in` = Scanner(System.`in`)
-private val board = Array(8) { CharArray(8) }
+private var currentPlayer = 0
+private var maxPlayers = 4
+private val board = Array(BOARD_SIZE) { CharArray(BOARD_SIZE) }
 private val availableLetters: LinkedList<Char> = object : LinkedList<Char>() {
     init {
         addLetters(this, 'A', 9)
@@ -80,7 +76,8 @@ private val points = object : Hashtable<Char, Int>() {
         this['Z'] = 10
     }
 }
-private val playerRacks = Hashtable<Int, ArrayList<Char>>()
+private val playerRacks = ArrayList<MutableList<Char>>()
+private val validWords = ArrayList<String>()
 
 fun main() {
     initialize()
@@ -88,12 +85,15 @@ fun main() {
         cls()
         printBoard()
         println("----- Player #" + (currentPlayer + 1) + " -----")
-        currentPlayer = playerTurn(currentPlayer, playerRacks[currentPlayer]!!)
+        currentPlayer = playerTurn(currentPlayer, playerRacks[currentPlayer])
     }
 }
 
 
 fun initialize() {
+    val inputStream: InputStream = File("C:\\Users\\Kao\\IdeaProjects\\kt\\Week 7\\src\\words_alpha.txt").inputStream()
+    inputStream.bufferedReader().useLines { lines -> lines.forEach { validWords.add(it) } }
+
     for (row in board.indices) {
         for (column in 0 until board[row].size) {
             board[column][row] = '-'
@@ -101,28 +101,29 @@ fun initialize() {
     }
 
     availableLetters.shuffle()
+    for (i in 0 until maxPlayers) {
+        playerRacks.add(getLetters(RACK_SIZE).toMutableList())
+    }
 }
 
-fun playerTurn(player: Int, playerRack: ArrayList<Char>): Int {
+fun playerTurn(player: Int, playerRack: MutableList<Char>): Int {
     // Ask user x and y
     print("Enter x > ")
-    val x = `in`.nextInt()
+    val x = readLine()!!.toInt()
 
     print("Enter y > ")
-    val y = `in`.nextInt()
-
-    `in`.nextLine()
+    val y = readLine()!!.toInt()
 
     // Ask user direction
     print("Enter direction (down|across) > ")
-    val dirInput = `in`.nextLine()
+    val dirInput = readLine()
     val direction = when (dirInput) {
         "down" -> Direction.Down
         "across" -> Direction.Across
         else -> Direction.Down
     }
 
-    val word = getWord(playerRack)
+    val word = getWord(playerRack, x, y, direction)
 
     println("That was " + getPoints(word) + " points!")
 
@@ -132,18 +133,34 @@ fun playerTurn(player: Int, playerRack: ArrayList<Char>): Int {
     return (player + 1) % maxPlayers
 }
 
-fun getWord(playerRack: ArrayList<Char>): String {
+fun getWord(playerRack: MutableList<Char>, x: Int, y: Int, direction: Direction): String {
     println("Your letters are: ${playerRack.joinToString()}")
     print("Enter word > ")
 
-    val temp = playerRack
-    val word = `in`.nextLine()
-    for (letter in word) {
+    val temp = playerRack.toMutableList()
+    val word = readLine()!!
+
+    val maxLength = when (direction) {
+        Direction.Across -> BOARD_SIZE - x
+        Direction.Down -> BOARD_SIZE - y
+    }
+
+    if (word.length > maxLength) {
+        println("That word is too long!")
+        return getWord(playerRack, x, y, direction)
+    }
+
+    if (!validWords.any { it.equals(word, true) }) {
+        println("Invalid word!")
+        return getWord(playerRack, x, y, direction)
+    }
+
+    for (letter in word.toUpperCase()) {
         if (temp.contains(letter)) {
             temp.remove(letter)
         } else {
-            println("Invalid word!")
-            return getWord(playerRack)
+            println("You don't have enough letters for that")
+            return getWord(playerRack, x, y, direction)
         }
     }
 
@@ -214,10 +231,5 @@ fun padLeft(s: String, n: Int): String {
 }
 
 fun cls() {
-    try {
-        Runtime.getRuntime().exec("cls")
-    } catch (e: IOException) {
-        e.printStackTrace()
-    }
-
+    print("\u001b[H\u001b[2J")
 }
