@@ -13,7 +13,6 @@ enum class Direction {
 private const val BOARD_SIZE = 15
 private const val RACK_SIZE = 7
 
-private val rnd = ThreadLocalRandom.current()
 private var currentPlayer = 0
 private var maxPlayers = 4
 private val board = Array(BOARD_SIZE) { CharArray(BOARD_SIZE) }
