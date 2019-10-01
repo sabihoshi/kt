@@ -3,6 +3,7 @@ import java.util.*
 import java.util.concurrent.ThreadLocalRandom
 import java.io.File
 import java.io.InputStream
+import java.nio.file.Paths
 
 enum class Direction {
     Down,
@@ -91,7 +92,7 @@ fun main() {
 
 
 fun initialize() {
-    val inputStream: InputStream = File("C:\\Users\\Kao\\IdeaProjects\\kt\\Week 7\\src\\words_alpha.txt").inputStream()
+    val inputStream: InputStream = File(Paths.get(".\\src\\words_alpha.txt").toAbsolutePath().toString()).inputStream()
     inputStream.bufferedReader().useLines { lines -> lines.forEach { validWords.add(it) } }
 
     for (row in board.indices) {
