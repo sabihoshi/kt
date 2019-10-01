@@ -1,6 +1,4 @@
-import java.io.IOException
 import java.util.*
-import java.util.concurrent.ThreadLocalRandom
 import java.io.File
 import java.io.InputStream
 import java.nio.file.Paths
@@ -125,12 +123,32 @@ fun playerTurn(player: Int, playerRack: MutableList<Char>): Int {
 
     val word = getWord(playerRack, x, y, direction)
 
+    if (direction == Direction.Across) {
+        for (i in 0 until word.length) {
+            val char = board[y][x + i]
+            if (isConflict(char, word, i))
+                return playerTurn(player, playerRack)
+        }
+    } else if (direction == Direction.Down) {
+        for (i in 0 until word.length) {
+            val char = board[y + i][x]
+            if (isConflict(char, word, i))
+                return playerTurn(player, playerRack)
+        }
+    }
+
     println("That was " + getPoints(word) + " points!")
 
-    // placeLetters()
     placeLetters(x, y, direction, word)
 
     return (player + 1) % maxPlayers
+}
+
+private fun isConflict(char: Char, word: String, i: Int): Boolean {
+    return if (char != '-' && char != word[i]) {
+        println("The letter ${word[i]} does not fit.")
+        true
+    } else false
 }
 
 fun getWord(playerRack: MutableList<Char>, x: Int, y: Int, direction: Direction): String {
@@ -159,7 +177,7 @@ fun getWord(playerRack: MutableList<Char>, x: Int, y: Int, direction: Direction)
         if (temp.contains(letter)) {
             temp.remove(letter)
         } else {
-            println("You don't have enough letters for that")
+            println("You don't have enough letters for that.")
             return getWord(playerRack, x, y, direction)
         }
     }
