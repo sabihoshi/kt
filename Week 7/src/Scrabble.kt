@@ -196,14 +196,10 @@ fun getPoints(word: String): Int {
     return result
 }
 
-fun drawNextLetter(): Char {
-    return availableLetters.pop()
-}
-
 fun getLetters(amount: Int): CharArray {
     val result = CharArray(amount)
     for (i in 0 until amount) {
-        result[i] = drawNextLetter()
+        result[i] = availableLetters.pop()
     }
     return result
 }
