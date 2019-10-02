@@ -80,7 +80,7 @@ private val validWords = ArrayList<String>()
 fun main() {
     initialize()
     while (true) {
-        cls()
+        Console.cls()
         printBoard()
         println("----- Player #" + (currentPlayer + 1) + " -----")
         currentPlayer = playerTurn(currentPlayer, playerRacks[currentPlayer])
@@ -246,8 +246,4 @@ fun join(delimiter: String, pad: Int, array: CharArray): String {
 
 fun padLeft(s: String, n: Int): String {
     return String.format("%" + n + "s", s)
-}
-
-fun cls() {
-    print("\u001b[H\u001b[2J")
 }

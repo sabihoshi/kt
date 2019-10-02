@@ -20,7 +20,7 @@ public class Scrabble {
         initialize();
 
         while (true) {
-            cls();
+            Console.cls();
             printBoard();
             System.out.println("----- Player #" + (currentPlayer + 1) + " -----");
             currentPlayer = playerTurn(currentPlayer);
@@ -146,6 +146,7 @@ public class Scrabble {
         for (int i = 0; i < amount; i++) {
             result[i] = drawNextLetter();
         }
+        Console.viewColors();
         return result;
     }
 
@@ -194,13 +195,5 @@ public class Scrabble {
 
     public static String padLeft(String s, int n) {
         return String.format("%" + n + "s", s);
-    }
-
-    public static void cls() {
-        try {
-            Runtime.getRuntime().exec("cls");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 }
