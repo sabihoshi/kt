@@ -38,11 +38,10 @@ public class Exam_1 {
     }
 
     private static void Poly4(int[] coeff, Double x) {
-        System.out.println(
-            getSimplified(coeff, x)
-                .stream()
-                .map(String::valueOf)
-                .collect(Collectors.joining(" + ")));
+        System.out.println(getSimplified(coeff, x)
+            .stream()
+            .map(String::valueOf)
+            .collect(Collectors.joining(" + ")));
     }
 
     private static void Poly5(int[] coeff, Double x) {
@@ -59,30 +58,28 @@ public class Exam_1 {
 
     private static void printPolynomial(int[] nums, Double x, boolean solveDegree) {
         var polynomials = IntStream.range(0, nums.length)
-                .filter(i -> nums[i] != 0)
-                .mapToObj((i) -> {
-                    var n = nums[i];
-                    if (i == 0) return n;
-                    else {
-                        var base = "";
-                        if (n < 0 && abs(n) == 1) base = "-";
-                        else if (n != 1) base = String.valueOf(n);
+            .filter(i -> nums[i] != 0)
+            .mapToObj((i) -> {
+                var n = nums[i];
+                if (i == 0) return n;
+                else {
+                    var base = "";
+                    if (n < 0 && abs(n) == 1) base = "-";
+                    else if (n != 1) base = String.valueOf(n);
 
-
-                        var degree = "";
-                        if (i == 1) {
-                            if (x == null) degree = "x";
-                            else degree = surround(abs(x));
-                        } else if (x == null) degree = "x^" + i;
-                        else {
-                            if (solveDegree) degree = surround(pow(x, i));
-                            else degree = surround(abs(x) + "^" + i);
-                        }
-
-                        return base + degree;
+                    var degree = x == null ? "x" : String.valueOf(abs(x));
+                    if (i != 1) {
+                        degree = x == null ?
+                            "x^" + i :
+                            solveDegree ?
+                                surround(pow(x, i)) :
+                                surround(abs(x) + "^" + i);
                     }
-                })
-                .toArray();
+
+                    return base + degree;
+                }
+            })
+            .toArray();
 
         System.out.println(join(" + ", 1, polynomials));
     }
@@ -118,9 +115,9 @@ public class Exam_1 {
         return prompt(ask, s -> {
             var stream = Arrays.stream(s.split(" "));
             var result = stream
-                    .limit(size)
-                    .mapToInt(Integer::parseInt)
-                    .toArray();
+                .limit(size)
+                .mapToInt(Integer::parseInt)
+                .toArray();
             return result;
         });
     }
