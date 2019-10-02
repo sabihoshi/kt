@@ -38,7 +38,11 @@ public class Exam_1 {
     }
 
     private static void Poly4(int[] coeff, Double x) {
-        System.out.println(join(" + ", 0, getSimplified(coeff, x).toArray()));
+        System.out.println(
+            getSimplified(coeff, x)
+                .stream()
+                .map(String::valueOf)
+                .collect(Collectors.joining(" + ")));
     }
 
     private static void Poly5(int[] coeff, Double x) {
@@ -62,17 +66,17 @@ public class Exam_1 {
                     else {
                         var base = "";
                         if (n < 0 && abs(n) == 1) base = "-";
-                        else if (n != 1) base = "$n";
+                        else if (n != 1) base = String.valueOf(n);
 
 
                         var degree = "";
                         if (i == 1) {
                             if (x == null) degree = "x";
-                            else degree = "(${abs(x)})";
-                        } else if (x == null) degree = "x^$i";
+                            else degree = "(" + abs(x) + ")";
+                        } else if (x == null) degree = "x^" + i;
                         else {
-                            if (solveDegree) degree = "(${x.pow(i.toDouble())})";
-                            else degree = "(${abs(x)}^$i)";
+                            if (solveDegree) degree = "(" + pow(x, i) + ")";
+                            else degree = "(" + abs(x) + "^" + i + ")";
                         }
 
                         return base + degree;
@@ -96,8 +100,7 @@ public class Exam_1 {
     }
 
     private static int prompt(String question, int min, int max) {
-        System.out.print(question + " > ");
-        var result = scanner.nextInt();
+        var result = prompt(question, Integer::valueOf);
         if (result > max || result < min)
             return prompt(question, min, max);
         return result;
