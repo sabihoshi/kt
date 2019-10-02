@@ -72,11 +72,11 @@ public class Exam_1 {
                         var degree = "";
                         if (i == 1) {
                             if (x == null) degree = "x";
-                            else degree = "(" + abs(x) + ")";
+                            else degree = surround(abs(x));
                         } else if (x == null) degree = "x^" + i;
                         else {
-                            if (solveDegree) degree = "(" + pow(x, i) + ")";
-                            else degree = "(" + abs(x) + "^" + i + ")";
+                            if (solveDegree) degree = surround(pow(x, i));
+                            else degree = surround(abs(x) + "^" + i);
                         }
 
                         return base + degree;
@@ -85,6 +85,14 @@ public class Exam_1 {
                 .toArray();
 
         System.out.println(join(" + ", 1, polynomials));
+    }
+
+    private static String surround(double x) {
+        return surround(String.valueOf(x));
+    }
+
+    private static String surround(String x) {
+        return "(" + x + ")";
     }
 
     private static List<Double> getSimplified(int[] nums, double x) {
