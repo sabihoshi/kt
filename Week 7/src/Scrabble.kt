@@ -224,9 +224,13 @@ fun placeLetters(x: Int, y: Int, direction: Direction, word: String) {
 }
 
 fun printBoard() {
+    join("", 3, board.indices.map { it.toChar() }.toCharArray()).also {
+        println(it)
+    }
     for (row in board) {
-        val out = join("", 3, row)
-        println(out)
+        join("", 3, row).also {
+            println(it)
+        }
     }
 }
 
