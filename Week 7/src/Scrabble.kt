@@ -5,7 +5,9 @@ import java.nio.file.Paths
 
 enum class Direction {
     Down,
-    Across
+    Across,
+    Upwards,
+    Backwards
 }
 
 private const val BOARD_SIZE = 15
@@ -108,32 +110,17 @@ fun initialize(): Player {
 }
 
 fun playerTurn(player: Player): Player {
-    val coords = promptMultiple("Enter x & y", { it.toInt() }, 2)
-    val x = coords[0]
-    val y = coords[1]
-
-    print("Enter direction (down|across) > ")
-    val dirInput = readLine()
-    val direction = when (dirInput) {
-        "down" -> Direction.Down
-        "across" -> Direction.Across
-        else -> Direction.Down
+    val (x, y) = prompt("Enter x & y") {
+        val pair = it.split(" ").take(2)
+        Pair(pair[0].toInt(), pair[1].toInt())
     }
 
+    val direction = getDirection()
     val word = getWord(player, x, y, direction)
 
-    if (direction == Direction.Across) {
-        for (i in 0 until word.length) {
-            val char = board[y][x + i]
-            if (isConflict(char.letter, word, i))
-                return playerTurn(player)
-        }
-    } else if (direction == Direction.Down) {
-        for (i in 0 until word.length) {
-            val char = board[y + i][x].letter
-            if (isConflict(char, word, i))
-                return playerTurn(player)
-        }
+    for((letter, i) in getDirectionGenerator(direction, word, x, y)) {
+        if (isConflict(letter.letter, word, i))
+            return playerTurn(player)
     }
 
     println("That was " + getPoints(word) + " points!")
@@ -143,11 +130,39 @@ fun playerTurn(player: Player): Player {
     return players.single { it.number == (currentPlayer.number + 1) % (players.size + 1) }
 }
 
-private fun isConflict(char: Char, word: String, i: Int): Boolean {
-    return if (char != '-' && char != word[i]) {
+private fun isConflict(letter: Char, word: String, i: Int): Boolean {
+    return if (letter != '-' && letter != word[i]) {
         println("The letter ${word[i]} does not fit.")
         true
     } else false
+}
+
+fun getDirectionGenerator(direction: Direction, word: String, x: Int, y: Int) = sequence {
+    when (direction) {
+        Direction.Across -> for (i in word.indices) {
+            yield(Pair(board [y][x + i], i))
+        }
+        Direction.Backwards -> for (i in word.indices.reversed()) {
+            yield(Pair(board[y][x - i], i))
+        }
+        Direction.Down -> for (i in word.indices) {
+            yield(Pair(board[y + i][x], i))
+        }
+        Direction.Upwards -> for (i in word.indices.reversed()) {
+            yield(Pair(board[y - i][x], i))
+        }
+    }
+}
+
+fun getDirection(): Direction {
+    print("Enter direction (W|A|S|D) > ")
+    return when (readLine()!!.toUpperCase()) {
+        "S" -> Direction.Down
+        "D" -> Direction.Across
+        "A" -> Direction.Backwards
+        "W" -> Direction.Upwards
+        else -> getDirection()
+    }
 }
 
 fun getWord(player: Player, x: Int, y: Int, direction: Direction): String {
@@ -156,7 +171,9 @@ fun getWord(player: Player, x: Int, y: Int, direction: Direction): String {
 
     val maxLength = when (direction) {
         Direction.Across -> BOARD_SIZE - x
+        Direction.Backwards -> x
         Direction.Down -> BOARD_SIZE - y
+        Direction.Upwards -> y
     }
 
     if (word.length > maxLength) {
@@ -208,36 +225,18 @@ fun addLetters(arr: MutableList<Char>, c: Char, amount: Int) {
 
 fun placeLetters(x: Int, y: Int, direction: Direction, word: String, player: Player) {
     val temp = word.toUpperCase()
-    if (direction == Direction.Across) {
-        for (i in 0 until temp.length) {
-            val letter = board[y][x + i]
-            letter.letter = temp[i]
-            letter.player = player
-        }
-    } else if (direction == Direction.Down) {
-        for (i in 0 until temp.length) {
-            val letter = board[y + i][x]
-            letter.letter = temp[i]
-            letter.player = player
-        }
+
+    for((letter, i) in getDirectionGenerator(direction, word, x, y)) {
+        setLetter(letter, temp[i], player)
     }
+}
+
+private fun setLetter(letter: Letter, c: Char, player: Player) {
+    letter.letter = c
+    letter.player = player
 }
 
 fun printBoard() = table.printTable(board, 2)
-
-fun join(delimiter: String, pad: Int, array: CharArray): String {
-    val sb = StringBuilder()
-    for (i in array.indices) {
-        sb.append(padLeft(array[i].toString(), pad))
-        if (i != array.size - 1)
-            sb.append(delimiter)
-    }
-    return sb.toString()
-}
-
-fun padLeft(s: String, n: Int): String {
-    return String.format("%" + n + "s", s)
-}
 
 fun prompt(s: String): String {
     print("$s > ")
@@ -250,8 +249,4 @@ fun <T> prompt(s: String, parse: (String) -> T): T {
 
 fun <T> promptMultiple(s: String, parse: (String) -> T): List<T> {
     return prompt(s) { it.split(" ").map(parse) }
-}
-
-fun <T> promptMultiple(s: String, parse: (String) -> T, max: Int): List<T> {
-    return promptMultiple(s, parse).take(max)
 }
