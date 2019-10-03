@@ -40,7 +40,7 @@ public class Console {
 
     public static void home() {
         vt100();
-        System.out.print(ESC + "[H");
+        System.out.print(ESC + "H");
     }
 
     public static void eos() {

@@ -1,37 +1,38 @@
-class Table {
+import Console.color
+
+class Table(val foreGround: Int) {
+
     fun top(width: Int, columns: Int): String {
-        return surround("╔", "╦", "╗", '═', width, columns)
-    }
-
-    fun divider(width: Int, columns: Int): String {
-        return surround("║", "║", "║", ' ', width, columns)
-    }
-
-    fun dividerCross(width: Int, columns: Int): String {
-        return surround("╠", "╬", "╣", '═', width, columns)
+        return surround("╔", "═", "╗",  columns, width)
     }
 
     fun bottom(width: Int, columns: Int): String {
-        return surround("╚", "╩", "╝", '═', width, columns)
+        return surround("╚", "═", "╝",  columns, width)
     }
 
-    fun surround(start: String, middle: String, end: String, padChar: Char, width: Int, columns: Int): String {
-        return "${start.padEnd(width, padChar)}${middle.padEnd(width, padChar).repeat(columns)}$end"
+    fun surround(start: String, middle: String, end: String, items: Int, spacing: Int): String {
+        return "$start${middle.repeat(items * (spacing + 1) - 1)}$end"
     }
 
-    fun table(width: Int, length: Int, columns: Int, rows: Int) {
-        println(top(width, columns))
-        repeat(rows) {
-            repeat(length) {
-                println(divider(width, columns))
+    fun printTable(board: Array<Array<Letter>>, cellSize: Int?) {
+        val size = board.size + 1
+        val spacing = cellSize ?: 3
+        val delimiter = " ".repeat(spacing)
+
+        println(top(spacing, size))
+        for (row in board) {
+            row.map{x -> {
+                color(x.second)
+                "${x.first}"
+                color(foreGround)
+            }}.joinToString(
+                delimiter,
+                postfix = delimiter,
+                prefix = delimiter
+            ).also {
+                println("║$it║")
             }
-            println(dividerCross(width, columns))
         }
-
-        repeat(length) {
-            println(divider(width, columns))
-        }
-
-        println(bottom(width, columns))
+        println(bottom(spacing, size))
     }
 }
