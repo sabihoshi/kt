@@ -171,12 +171,12 @@ fun getWord(player: Player, x: Int, y: Int, direction: Direction): String {
 
     val maxLength = when (direction) {
         Direction.Across -> BOARD_SIZE - x
-        Direction.Backwards -> x
+        Direction.Backwards -> x + 1
         Direction.Down -> BOARD_SIZE - y
-        Direction.Upwards -> y
+        Direction.Upwards -> y + 1
     }
 
-    if (word.length > maxLength) {
+    if (word.length > maxLength || word.length > RACK_SIZE) {
         println("That word is too long!")
         return getWord(player, x, y, direction)
     }
@@ -245,8 +245,4 @@ fun prompt(s: String): String {
 
 fun <T> prompt(s: String, parse: (String) -> T): T {
     return parse(prompt(s))
-}
-
-fun <T> promptMultiple(s: String, parse: (String) -> T): List<T> {
-    return prompt(s) { it.split(" ").map(parse) }
 }
