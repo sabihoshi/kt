@@ -118,7 +118,7 @@ fun playerTurn(player: Player): Player {
     val direction = getDirection()
     val word = getWord(player, x, y, direction)
 
-    for((letter, i) in getDirectionGenerator(direction, word, x, y)) {
+    for ((letter, i) in getDirectionGenerator(direction, word, x, y)) {
         if (isConflict(letter.letter, word, i))
             return playerTurn(player)
     }
@@ -140,7 +140,7 @@ private fun isConflict(letter: Char, word: String, i: Int): Boolean {
 fun getDirectionGenerator(direction: Direction, word: String, x: Int, y: Int) = sequence {
     when (direction) {
         Direction.Across -> for (i in word.indices) {
-            yield(Pair(board [y][x + i], i))
+            yield(Pair(board[y][x + i], i))
         }
         Direction.Backwards -> for (i in word.indices.reversed()) {
             yield(Pair(board[y][x - i], i))
@@ -166,7 +166,6 @@ fun getDirection(): Direction {
 }
 
 fun getWord(player: Player, x: Int, y: Int, direction: Direction): String {
-    val temp = player.rack
     val word = prompt("Enter word")
 
     val maxLength = when (direction) {
@@ -186,18 +185,23 @@ fun getWord(player: Player, x: Int, y: Int, direction: Direction): String {
         return getWord(player, x, y, direction)
     }
 
-    for (letter in word.toUpperCase()) {
-        if (temp.contains(letter)) {
-            temp.remove(letter)
-        } else {
-            println("You don't have enough letters for that.")
-            return getWord(player, x, y, direction)
-        }
+    if (!strictContains(word, player.rack)) {
+        println("You don't have enough letters for that.")
+        return getWord(player, x, y, direction)
     }
 
     player.rack.removeAll(word.toList())
     player.rack.addAll(getLetters(word.length).toList())
     return word
+}
+
+fun letterCounts(chars: MutableList<Char>): Map<Char, Int> =
+    chars.groupBy { t -> t }.map { it.key to it.value.count() }.toMap()
+
+fun strictContains(word: String, chars: MutableList<Char>): Boolean {
+    val wordLetters = letterCounts(word.toMutableList())
+    val availableLetters = letterCounts(chars)
+    return wordLetters.all { k -> availableLetters.getOrDefault(k.key, 0) >= k.value }
 }
 
 fun getPoints(word: String): Int {
@@ -226,7 +230,7 @@ fun addLetters(arr: MutableList<Char>, c: Char, amount: Int) {
 fun placeLetters(x: Int, y: Int, direction: Direction, word: String, player: Player) {
     val temp = word.toUpperCase()
 
-    for((letter, i) in getDirectionGenerator(direction, word, x, y)) {
+    for ((letter, i) in getDirectionGenerator(direction, word, x, y)) {
         setLetter(letter, temp[i], player)
     }
 }
