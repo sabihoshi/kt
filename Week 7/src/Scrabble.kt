@@ -109,10 +109,33 @@ fun initialize(): Player {
     return players.first()
 }
 
+fun removeLetters(player: Player) {
+    val word = prompt("Enter letters to remove")
+    removeLetters(player, word)
+}
+
+private fun removeLetters(player: Player, word: String) {
+    player.rack.removeAll(word.toList())
+    player.rack.addAll(getLetters(word.length).toList())
+}
+
 fun playerTurn(player: Player): Player {
-    val (x, y) = prompt("Enter x & y") {
-        val pair = it.split(" ").take(2)
-        Pair(pair[0].toInt(), pair[1].toInt())
+    val nextPlayer = players.single { it.number == (currentPlayer.number + 1) % (players.size + 1) }
+    println("Enter '-' to remove letters.")
+    val coords = prompt("Enter x & y")
+
+    if (coords == "-") {
+        removeLetters(player)
+        return nextPlayer
+    }
+
+    val pair = coords.split(" ").take(2)
+    val (x, y) = Pair(pair[0].toInt(), pair[1].toInt())
+
+
+    if (!player.rack.contains(board[y][x].letter)) {
+        println("You don't have any letters in your rack at this letter.")
+        return playerTurn(player)
     }
 
     val direction = getDirection()
@@ -127,7 +150,7 @@ fun playerTurn(player: Player): Player {
 
     placeLetters(x, y, direction, word, currentPlayer)
 
-    return players.single { it.number == (currentPlayer.number + 1) % (players.size + 1) }
+    return nextPlayer
 }
 
 private fun isConflict(letter: Char, word: String, i: Int): Boolean {
@@ -190,8 +213,7 @@ fun getWord(player: Player, x: Int, y: Int, direction: Direction): String {
         return getWord(player, x, y, direction)
     }
 
-    player.rack.removeAll(word.toList())
-    player.rack.addAll(getLetters(word.length).toList())
+    removeLetters(player, word)
     return word
 }
 
