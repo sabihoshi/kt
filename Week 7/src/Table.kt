@@ -21,17 +21,13 @@ class Table(val foreGround: Int) {
 
         println(top(spacing, size))
         for (row in board) {
-            row.map{x -> {
-                color(x.second)
-                "${x.first}"
+            print("║$delimiter")
+            for(i in row) {
+                color(i.player.color)
+                print("${i.letter}$delimiter")
                 color(foreGround)
-            }}.joinToString(
-                delimiter,
-                postfix = delimiter,
-                prefix = delimiter
-            ).also {
-                println("║$it║")
             }
+            println("║$delimiter")
         }
         println(bottom(spacing, size))
     }
