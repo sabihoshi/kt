@@ -103,7 +103,7 @@ fun initialize(): Player {
     inputStream.bufferedReader().useLines { lines -> lines.forEach { validWords.add(it) } }
 
     availableLetters.shuffle()
-    for (color in 1 until maxPlayers) {
+    for (color in 1..maxPlayers) {
         players.add(Player(color, color, getLetters(RACK_SIZE).sorted().toMutableList()))
     }
     return players.first()
