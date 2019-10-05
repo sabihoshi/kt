@@ -121,19 +121,16 @@ private fun removeLetters(player: Player, word: String) {
 
 fun playerTurn(player: Player): Player {
     val nextPlayer = players.single { it.number == (currentPlayer.number + 1) % (players.size + 1) }
+
     println("Enter '-' to remove letters.")
     val coords = prompt("Enter x & y")
-
     if (coords == "-") {
         removeLetters(player)
         return nextPlayer
     }
+    val (x, y) = getCoordinates(coords)
 
-    val pair = coords.split(" ").take(2)
-    val (x, y) = Pair(pair[0].toInt(), pair[1].toInt())
-
-
-    if (!player.rack.contains(board[y][x].letter)) {
+    if (board[y][x].letter != '-' && !player.rack.contains(board[y][x].letter)) {
         println("You don't have any letters in your rack at this letter.")
         return playerTurn(player)
     }
@@ -151,6 +148,15 @@ fun playerTurn(player: Player): Player {
     placeLetters(x, y, direction, word, currentPlayer)
 
     return nextPlayer
+}
+
+private fun getCoordinates(coords: String): Pair<Int, Int> {
+    val pair = coords.split(" ", limit = 2)
+    if (pair.size != 2 || pair.any { it.toIntOrNull() == null }) {
+        println("Invalid coordinates!")
+        return getCoordinates(prompt("Enter x & y"))
+    }
+    return Pair(pair[0].toInt(), pair[1].toInt())
 }
 
 private fun isConflict(letter: Char, word: String, i: Int): Boolean {
@@ -221,9 +227,11 @@ fun letterCounts(chars: MutableList<Char>): Map<Char, Int> =
     chars.groupBy { t -> t }.map { it.key to it.value.count() }.toMap()
 
 fun strictContains(word: String, chars: MutableList<Char>): Boolean {
-    val wordLetters = letterCounts(word.toMutableList())
+    val wordLetters = letterCounts(word.toUpperCase().toMutableList())
     val availableLetters = letterCounts(chars)
-    return wordLetters.all { k -> availableLetters.getOrDefault(k.key, 0) >= k.value }
+    return wordLetters.all { k ->
+        availableLetters.getOrDefault(k.key, 0) >= k.value
+    }
 }
 
 fun getPoints(word: String): Int {
