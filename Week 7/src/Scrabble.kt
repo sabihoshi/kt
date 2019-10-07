@@ -92,7 +92,7 @@ fun main() {
     repeat(MAX_MOVES) {
         Console.cls()
         printBoard()
-        println("----- Player #" + (currentPlayer.number) + " -----")
+        println("═════ Player #${currentPlayer.number + 1} ═════")
         println("Your letters are: ${currentPlayer.rack.joinToString()}")
         currentPlayer = playerTurn(currentPlayer)
     }
@@ -104,8 +104,8 @@ fun initialize(): Player {
     inputStream.bufferedReader().useLines { lines -> lines.forEach { validWords.add(it) } }
 
     availableLetters.shuffle()
-    for (color in 1..maxPlayers) {
-        players.add(Player(color, color, getLetters(RACK_SIZE).sorted().toMutableList()))
+    for (i in 0 until maxPlayers) {
+        players.add(Player(i + 1, i, getLetters(RACK_SIZE).sorted().toMutableList()))
     }
     return players.first()
 }
@@ -121,7 +121,7 @@ private fun removeLetters(player: Player, word: String) {
 }
 
 fun playerTurn(player: Player): Player {
-    val nextPlayer = players.single { it.number == (currentPlayer.number + 1) % (players.size + 1) }
+    val nextPlayer = players[(currentPlayer.number + 1) % (players.size + 1)]
 
     println("Enter '-' to remove letters.")
     val coords = prompt("Enter coordinates")
@@ -129,6 +129,7 @@ fun playerTurn(player: Player): Player {
         removeLetters(player)
         return nextPlayer
     }
+
     val (x, y) = getCoordinates(coords)
 
     if (board[y][x].letter != '-' && !player.rack.contains(board[y][x].letter)) {
@@ -158,7 +159,7 @@ private fun getCoordinates(coords: String): Pair<Int, Int> {
         println("Invalid coordinates!")
         return getCoordinates(prompt("Enter coordinates"))
     }
-    val x = (xFirst?.groups?.get(1) ?: yFirst!!.groups[2])!!.value.toUpperCase().first().toInt() - 'A'.toInt()
+    val x = (xFirst?.groups?.get(1) ?: yFirst!!.groups[2])!!.value.first().toUpperCase() - 'A'
     val y = Integer.parseInt((xFirst?.groups?.get(2) ?: yFirst!!.groups[1])!!.value)
     if (x > BOARD_SIZE || y > BOARD_SIZE) {
         println("Those coordinates are outside of range!")
@@ -244,8 +245,8 @@ fun strictContains(word: String, chars: MutableList<Char>): Boolean {
 fun getPoints(word: String): Int {
     val temp = word.toUpperCase()
     var result = 0
-    for (i in 0 until temp.length) {
-        result += points[temp[i]]!!
+    for (char in temp) {
+        result += points[char]!!
     }
     return result
 }
