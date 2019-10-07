@@ -124,7 +124,7 @@ fun playerTurn(player: Player): Player {
     val nextPlayer = players.single { it.number == (currentPlayer.number + 1) % (players.size + 1) }
 
     println("Enter '-' to remove letters.")
-    val coords = prompt("Enter x & y")
+    val coords = prompt("Enter coordinates")
     if (coords == "-") {
         removeLetters(player)
         return nextPlayer
@@ -152,16 +152,19 @@ fun playerTurn(player: Player): Player {
 }
 
 private fun getCoordinates(coords: String): Pair<Int, Int> {
-    val pair = coords.split(" ", limit = 2)
-    if (pair.size != 2 || pair.any { it.toIntOrNull() == null }) {
+    val xFirst = Regex("^(?<x>[A-O])(?<y>[0-9]+)$", RegexOption.IGNORE_CASE).matchEntire(coords)
+    val yFirst = Regex("^(?<y>[0-9]+)(?<x>[A-O])$", RegexOption.IGNORE_CASE).matchEntire(coords)
+    if (xFirst == null && yFirst == null) {
         println("Invalid coordinates!")
-        return getCoordinates(prompt("Enter x & y"))
+        return getCoordinates(prompt("Enter coordinates"))
     }
-    return Pair(pair[0].toInt(), pair[1].toInt())
+    val x = (xFirst?.groups?.get(1) ?: yFirst!!.groups[2])!!.value.toUpperCase().first().toInt() - 'A'.toInt()
+    val y = Integer.parseInt((xFirst?.groups?.get(2) ?: yFirst!!.groups[1])!!.value)
+    return Pair(x, y)
 }
 
 private fun isConflict(letter: Char, word: String, i: Int): Boolean {
-    return if (letter != '-' && letter != word[i]) {
+    return if (letter != '-' && letter != word[i].toUpperCase()) {
         println("The letter ${word[i]} does not fit.")
         true
     } else false
