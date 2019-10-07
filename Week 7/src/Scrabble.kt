@@ -12,6 +12,7 @@ enum class Direction {
 
 private const val BOARD_SIZE = 15
 private const val RACK_SIZE = 7
+private const val MAX_MOVES = 10
 
 private var maxPlayers = 4
 private val unknownPlayer = Player(15, -1, mutableListOf())
@@ -88,7 +89,7 @@ private val table = Table(15)
 fun main() {
     currentPlayer = initialize()
 
-    while (true) {
+    repeat(MAX_MOVES) {
         Console.cls()
         printBoard()
         println("----- Player #" + (currentPlayer.number) + " -----")
@@ -184,8 +185,7 @@ fun getDirectionGenerator(direction: Direction, word: String, x: Int, y: Int) = 
 }
 
 fun getDirection(): Direction {
-    print("Enter direction (W|A|S|D) > ")
-    return when (readLine()!!.toUpperCase()) {
+    return when (prompt("Enter direction (W|A|S|D)").toUpperCase()) {
         "S" -> Direction.Down
         "D" -> Direction.Across
         "A" -> Direction.Backwards
@@ -261,13 +261,9 @@ fun placeLetters(x: Int, y: Int, direction: Direction, word: String, player: Pla
     val temp = word.toUpperCase()
 
     for ((letter, i) in getDirectionGenerator(direction, word, x, y)) {
-        setLetter(letter, temp[i], player)
+        letter.letter = temp[i]
+        letter.player = player
     }
-}
-
-private fun setLetter(letter: Letter, c: Char, player: Player) {
-    letter.letter = c
-    letter.player = player
 }
 
 fun printBoard() = table.printTable(board, 2)
