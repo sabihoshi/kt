@@ -160,6 +160,10 @@ private fun getCoordinates(coords: String): Pair<Int, Int> {
     }
     val x = (xFirst?.groups?.get(1) ?: yFirst!!.groups[2])!!.value.toUpperCase().first().toInt() - 'A'.toInt()
     val y = Integer.parseInt((xFirst?.groups?.get(2) ?: yFirst!!.groups[1])!!.value)
+    if (x > BOARD_SIZE || y > BOARD_SIZE) {
+        println("Those coordinates are outside of range!")
+        return getCoordinates(prompt("Enter coordinates"))
+    }
     return Pair(x, y)
 }
 
