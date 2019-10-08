@@ -140,14 +140,26 @@ fun playerTurn(player: Player): Player {
     val direction = getDirection()
     val word = getWord(player, x, y, direction)
 
+    val needed = StringBuilder()
     for ((letter, i) in getDirectionGenerator(direction, word, x, y)) {
-        if (isConflict(letter.letter, word, i))
+        if (letter.letter == '-') {
+            needed.append(word[i].toUpperCase())
+        } else if (isConflict(letter, word[i])) {
+            println("The letter ${word[i]} does not fit at position ${(x + 'A'.toInt()).toChar()}$y.")
             return playerTurn(player)
+        }
+    }
+
+    if (!strictContains(needed.toString(), player.rack)) {
+        println("You don't have enough letters for that.")
+        return playerTurn(player)
     }
 
     println("That was " + getPoints(word) + " points!")
 
     placeLetters(x, y, direction, word, currentPlayer)
+    currentPlayer.rack.removeAll(needed.toString().toList())
+    currentPlayer.rack.addAll(getLetters(needed.length))
 
     return nextPlayer
 }
@@ -168,11 +180,8 @@ private fun getCoordinates(coords: String): Pair<Int, Int> {
     return Pair(x, y)
 }
 
-private fun isConflict(letter: Char, word: String, i: Int): Boolean {
-    return if (letter != '-' && letter != word[i].toUpperCase()) {
-        println("The letter ${word[i]} does not fit.")
-        true
-    } else false
+private fun isConflict(letter: Letter, check: Char): Boolean {
+    return letter.letter != '-' && letter.letter != check.toUpperCase()
 }
 
 fun getDirectionGenerator(direction: Direction, word: String, x: Int, y: Int) = sequence {
@@ -219,11 +228,6 @@ fun getWord(player: Player, x: Int, y: Int, direction: Direction): String {
 
     if (!validWords.any { it.equals(word, true) }) {
         println("Invalid word!")
-        return getWord(player, x, y, direction)
-    }
-
-    if (!strictContains(word, player.rack)) {
-        println("You don't have enough letters for that.")
         return getWord(player, x, y, direction)
     }
 
