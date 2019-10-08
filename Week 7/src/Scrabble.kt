@@ -94,13 +94,15 @@ fun main() {
     currentPlayer = initialize()
 
     for (i in 1..MAX_MOVES) {
-        Console.cls()
-        printPoints(BOARD_SIZE + 1, CELL_SIZE, players)
-        gotoXY(0, 0)
-        table.printTable(board, CELL_SIZE)
-        println("═════ Player #${currentPlayer.number + 1} ═════ Turn #${i/MAX_MOVES}")
-        println("Your letters are: ${currentPlayer.rack.joinToString()}")
-        currentPlayer = playerTurn(currentPlayer)
+        repeat(playerCount) {
+            Console.cls()
+            printPoints(BOARD_SIZE + 1, CELL_SIZE, players)
+            gotoXY(0, 0)
+            table.printTable(board, CELL_SIZE)
+            println("═════ Player #${currentPlayer.number + 1} ═════ Turn #${i}/$MAX_MOVES")
+            println("Your letters are: ${currentPlayer.rack.joinToString()}")
+            currentPlayer = playerTurn(currentPlayer)
+        }
     }
 
     val winner = players.maxBy { p -> p.points }!!
