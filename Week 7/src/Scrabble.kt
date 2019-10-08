@@ -131,7 +131,7 @@ fun removeLetters(player: Player) {
 }
 
 private fun removeLetters(player: Player, word: String) {
-    for (char in word) {
+    for (char in word.toUpperCase()) {
         player.rack.remove(char)
     }
 
