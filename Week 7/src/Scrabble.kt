@@ -123,8 +123,8 @@ fun initialize(): Player {
         players.add(Player(i + 1, i, getLetters(RACK_SIZE).toMutableList(), 0))
     }
 
-    for(y in board.indices) {
-        for(x in board[y].indices) {
+    for (y in board.indices) {
+        for (x in board[y].indices) {
             board[y][x].coordinate = Pair(x, y)
         }
     }
