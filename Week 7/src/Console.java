@@ -1,7 +1,6 @@
 import com.sun.jna.*;
 import com.sun.jna.platform.win32.WinDef.*;
 import com.sun.jna.platform.win32.WinNT.HANDLE;
-import kotlin.NotImplementedError;
 
 public class Console {
     private static boolean VT_ENABLED = false;
