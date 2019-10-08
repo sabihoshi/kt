@@ -121,7 +121,7 @@ private fun removeLetters(player: Player, word: String) {
 }
 
 fun playerTurn(player: Player): Player {
-    val nextPlayer = players[(currentPlayer.number + 1) % (players.size + 1)]
+    val nextPlayer = players[(currentPlayer.number + 1) % players.size]
 
     println("Enter '-' to remove letters.")
     val coords = prompt("Enter coordinates")
