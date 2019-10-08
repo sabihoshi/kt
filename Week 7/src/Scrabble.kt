@@ -13,8 +13,10 @@ enum class Direction {
 private const val BOARD_SIZE = 15
 private const val RACK_SIZE = 7
 private const val MAX_MOVES = 10
+private const val MAX_PLAYERS = 4
+private const val MIN_PLAYERS = 2
 
-private var maxPlayers = 4
+private var playerCount = 4
 private val unknownPlayer = Player(15, -1, mutableListOf())
 private var currentPlayer = unknownPlayer
 private val players = ArrayList<Player>()
@@ -99,12 +101,16 @@ fun main() {
 }
 
 fun initialize(): Player {
-    maxPlayers = prompt("How many players should there be?") { it.toInt() }
+    playerCount = prompt("How many players should there be?") { it.toInt() }
+    if(playerCount > MAX_PLAYERS || playerCount < MIN_PLAYERS) {
+        println("That's an invalid amount of players! Only $MIN_PLAYERS-$MAX_PLAYERS are allowed.")
+        return initialize()
+    }
     val inputStream: InputStream = File(Paths.get(".\\src\\words_alpha.txt").toAbsolutePath().toString()).inputStream()
     inputStream.bufferedReader().useLines { lines -> lines.forEach { validWords.add(it) } }
 
     availableLetters.shuffle()
-    for (i in 0 until maxPlayers) {
+    for (i in 0 until playerCount) {
         players.add(Player(i + 1, i, getLetters(RACK_SIZE).toMutableList()))
     }
     return players.first()
@@ -162,8 +168,8 @@ fun playerTurn(player: Player): Player {
 }
 
 private fun getCoordinates(coords: String): Pair<Int, Int> {
-    val xFirst = Regex("^(?<x>[A-O])(?<y>[0-9]+)$", RegexOption.IGNORE_CASE).matchEntire(coords)
-    val yFirst = Regex("^(?<y>[0-9]+)(?<x>[A-O])$", RegexOption.IGNORE_CASE).matchEntire(coords)
+    val xFirst = Regex("^\\s*(?<x>[A-O])\\s*(?<y>[0-9]+)\\s*$", RegexOption.IGNORE_CASE).matchEntire(coords)
+    val yFirst = Regex("^\\s*(?<y>[0-9]+)\\s*(?<x>[A-O])\\s*$", RegexOption.IGNORE_CASE).matchEntire(coords)
     if (xFirst == null && yFirst == null) {
         println("Invalid coordinates!")
         return getCoordinates(prompt("Enter coordinates"))
