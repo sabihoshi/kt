@@ -105,7 +105,7 @@ fun initialize(): Player {
 
     availableLetters.shuffle()
     for (i in 0 until maxPlayers) {
-        players.add(Player(i + 1, i, getLetters(RACK_SIZE).sorted().toMutableList()))
+        players.add(Player(i + 1, i, getLetters(RACK_SIZE).toMutableList()))
     }
     return players.first()
 }
@@ -116,7 +116,10 @@ fun removeLetters(player: Player) {
 }
 
 private fun removeLetters(player: Player, word: String) {
-    player.rack.removeAll(word.toList())
+    for(char in word) {
+        player.rack.remove(char)
+    }
+
     player.rack.addAll(getLetters(word.length).toList())
 }
 
@@ -131,11 +134,6 @@ fun playerTurn(player: Player): Player {
     }
 
     val (x, y) = getCoordinates(coords)
-
-    if (board[y][x].letter != '-' && !player.rack.contains(board[y][x].letter)) {
-        println("You don't have any letters in your rack at this letter.")
-        return playerTurn(player)
-    }
 
     val direction = getDirection()
     val word = getWord(player, x, y, direction)
@@ -158,8 +156,7 @@ fun playerTurn(player: Player): Player {
     println("That was " + getPoints(word) + " points!")
 
     placeLetters(x, y, direction, word, currentPlayer)
-    currentPlayer.rack.removeAll(needed.toString().toList())
-    currentPlayer.rack.addAll(getLetters(needed.length))
+    removeLetters(player, needed.toString())
 
     return nextPlayer
 }
@@ -231,7 +228,6 @@ fun getWord(player: Player, x: Int, y: Int, direction: Direction): String {
         return getWord(player, x, y, direction)
     }
 
-    removeLetters(player, word)
     return word
 }
 
@@ -260,7 +256,7 @@ fun getLetters(amount: Int): List<Char> {
     repeat(amount) {
         result.add(availableLetters.pop())
     }
-    return result
+    return result.sorted()
 }
 
 fun addLetters(arr: MutableList<Char>, c: Char, amount: Int) {
