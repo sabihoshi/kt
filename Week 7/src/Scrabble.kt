@@ -93,15 +93,18 @@ private val table = Table(15)
 fun main() {
     currentPlayer = initialize()
 
-    repeat(MAX_MOVES) {
+    for (i in 1..MAX_MOVES) {
         Console.cls()
         printPoints(BOARD_SIZE + 1, CELL_SIZE, players)
         gotoXY(0, 0)
         table.printTable(board, CELL_SIZE)
-        println("═════ Player #${currentPlayer.number + 1} ═════")
+        println("═════ Player #${currentPlayer.number + 1} ═════ Turn #${i/MAX_MOVES}")
         println("Your letters are: ${currentPlayer.rack.joinToString()}")
         currentPlayer = playerTurn(currentPlayer)
     }
+
+    val winner = players.maxBy { p -> p.points }!!
+    println("Game Over! The winner is player#${winner.number + 1} with ${winner.points} points!")
 }
 
 fun initialize(): Player {
