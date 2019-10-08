@@ -24,7 +24,7 @@ private var currentPlayer = unknownPlayer
 private val players = ArrayList<Player>()
 private val board = Array(BOARD_SIZE) {
     Array(BOARD_SIZE) {
-        Letter('-', unknownPlayer)
+        Letter('-', unknownPlayer, Pair(0, 0))
     }
 }
 private val availableLetters: LinkedList<Char> = object : LinkedList<Char>() {
@@ -122,6 +122,13 @@ fun initialize(): Player {
     for (i in 0 until playerCount) {
         players.add(Player(i + 1, i, getLetters(RACK_SIZE).toMutableList(), 0))
     }
+
+    for(y in board.indices) {
+        for(x in board[y].indices) {
+            board[y][x].coordinate = Pair(x, y)
+        }
+    }
+
     return players.first()
 }
 
@@ -158,7 +165,7 @@ fun playerTurn(player: Player): Player {
         if (letter.letter == '-') {
             needed.append(word[i].toUpperCase())
         } else if (isConflict(letter, word[i])) {
-            println("The letter ${word[i]} does not fit at position ${(x + 'A'.toInt()).toChar()}$y.")
+            println("The letter ${word[i]} does not fit at position ${(letter.coordinate.first + 'A'.toInt()).toChar()}${letter.coordinate.second}.")
             return playerTurn(player)
         }
     }
