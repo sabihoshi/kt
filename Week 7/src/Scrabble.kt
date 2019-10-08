@@ -163,7 +163,7 @@ fun playerTurn(player: Player): Player {
         }
     }
 
-    if (!strictContains(needed.toString(), player.rack)) {
+    if (needed.isEmpty() || !strictContains(needed.toString(), player.rack)) {
         println("You don't have enough letters for that.")
         return playerTurn(player)
     }
