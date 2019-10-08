@@ -1,3 +1,4 @@
+import Console.gotoXY
 import java.util.*
 import java.io.File
 import java.io.InputStream
@@ -15,9 +16,10 @@ private const val RACK_SIZE = 7
 private const val MAX_MOVES = 10
 private const val MAX_PLAYERS = 4
 private const val MIN_PLAYERS = 2
+private const val CELL_SIZE = 2
 
 private var playerCount = 4
-private val unknownPlayer = Player(15, -1, mutableListOf())
+private val unknownPlayer = Player(15, -1, mutableListOf(), 0)
 private var currentPlayer = unknownPlayer
 private val players = ArrayList<Player>()
 private val board = Array(BOARD_SIZE) {
@@ -93,7 +95,9 @@ fun main() {
 
     repeat(MAX_MOVES) {
         Console.cls()
-        printBoard()
+        printPoints(BOARD_SIZE + 1, CELL_SIZE, players)
+        gotoXY(0, 0)
+        table.printTable(board, CELL_SIZE)
         println("═════ Player #${currentPlayer.number + 1} ═════")
         println("Your letters are: ${currentPlayer.rack.joinToString()}")
         currentPlayer = playerTurn(currentPlayer)
@@ -102,7 +106,7 @@ fun main() {
 
 fun initialize(): Player {
     playerCount = prompt("How many players should there be?") { it.toInt() }
-    if(playerCount > MAX_PLAYERS || playerCount < MIN_PLAYERS) {
+    if (playerCount > MAX_PLAYERS || playerCount < MIN_PLAYERS) {
         println("That's an invalid amount of players! Only $MIN_PLAYERS-$MAX_PLAYERS are allowed.")
         return initialize()
     }
@@ -111,7 +115,7 @@ fun initialize(): Player {
 
     availableLetters.shuffle()
     for (i in 0 until playerCount) {
-        players.add(Player(i + 1, i, getLetters(RACK_SIZE).toMutableList()))
+        players.add(Player(i + 1, i, getLetters(RACK_SIZE).toMutableList(), 0))
     }
     return players.first()
 }
@@ -122,7 +126,7 @@ fun removeLetters(player: Player) {
 }
 
 private fun removeLetters(player: Player, word: String) {
-    for(char in word) {
+    for (char in word) {
         player.rack.remove(char)
     }
 
@@ -159,7 +163,11 @@ fun playerTurn(player: Player): Player {
         return playerTurn(player)
     }
 
-    println("That was " + getPoints(word) + " points!")
+    getPoints(word).also {
+        println("That was $it points!")
+        currentPlayer.points += it
+    }
+
 
     placeLetters(x, y, direction, word, currentPlayer)
     removeLetters(player, needed.toString())
@@ -257,6 +265,20 @@ fun getPoints(word: String): Int {
     return result
 }
 
+fun printPoints(size: Int, spacing: Int, players: ArrayList<Player>) {
+    val xJump = (size + 2) * (spacing + 1) + 8
+    val temp = players.sortedByDescending { p -> p.points }
+    printXY(xJump, 1, "■ Leaderboard ■")
+    for (i in temp.indices) {
+        printXY(xJump, i + 2, "${i + 1}. Player #${temp[i].number + 1}: ${temp[i].points}")
+    }
+}
+
+fun printXY(x: Int, y: Int, input: String) {
+    gotoXY(x, y)
+    print(input)
+}
+
 fun getLetters(amount: Int): List<Char> {
     val result = ArrayList<Char>(amount)
     repeat(amount) {
@@ -279,8 +301,6 @@ fun placeLetters(x: Int, y: Int, direction: Direction, word: String, player: Pla
         letter.player = player
     }
 }
-
-fun printBoard() = table.printTable(board, 2)
 
 fun prompt(s: String): String {
     print("$s > ")
