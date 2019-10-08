@@ -5,6 +5,10 @@ private const val Y_COORDINATE_COLOR = 4
 private const val PAD_SIZE = 2
 private const val MINIMUM_SPACING = 3
 
+class Letter(var letter: Char, var player: Player)
+
+class Player(val color: Int, val number: Int, val rack: MutableList<Char>, var points: Int)
+
 class Table(private val foreGround: Int) {
     fun top(width: Int, columns: Int): String {
         return surround("╔", "═", "╗", columns, width)
