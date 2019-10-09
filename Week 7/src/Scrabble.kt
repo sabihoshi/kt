@@ -93,20 +93,26 @@ private val table = Table(15)
 fun main() {
     currentPlayer = initialize()
 
-    for (i in 1..MAX_MOVES) {
+    gameStart(MAX_MOVES)
+
+    val winner = players.maxBy { p -> p.points }!!
+    println("Game Over! The winner is player#${winner.number + 1} with ${winner.points} points!")
+}
+
+private fun gameStart(moves: Int) {
+    for (i in 1..moves) {
         repeat(playerCount) {
             Console.cls()
             printPoints(BOARD_SIZE + 1, CELL_SIZE, players)
             gotoXY(0, 0)
             table.printTable(board, CELL_SIZE)
+            if (availableLetters.isEmpty())
+                return
             println("═════ Player #${currentPlayer.number + 1} ═════ Turn #${i}/$MAX_MOVES")
             println("Your letters are: ${currentPlayer.rack.joinToString()}")
             currentPlayer = playerTurn(currentPlayer)
         }
     }
-
-    val winner = players.maxBy { p -> p.points }!!
-    println("Game Over! The winner is player#${winner.number + 1} with ${winner.points} points!")
 }
 
 fun initialize(): Player {
@@ -294,6 +300,8 @@ fun printXY(x: Int, y: Int, input: String) {
 fun getLetters(amount: Int): List<Char> {
     val result = ArrayList<Char>(amount)
     repeat(amount) {
+        if(availableLetters.isEmpty())
+            return result.sorted()
         result.add(availableLetters.pop())
     }
     return result.sorted()
