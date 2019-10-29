@@ -14,38 +14,17 @@ public class Remedial {
         var first = ask("first");
         var second = ask("second");
 
-        var added = new Polynomial(add(first.getKey(), second.getKey()));
-        var subtracted = new Polynomial(subtract(first.getKey(), second.getKey()));
+        var added = first.add(second.Coefficients);
+        var subtracted = first.subtract(second.Coefficients);
 
-        t.println("(" + first.getValue() + ") + (" + second.getValue() + ") = " + added);
-        t.println("(" + first.getValue() + ") - (" + second.getValue() + ") = " + subtracted);
+        t.println("(" + first + ") + (" + second + ") = " + added);
+        t.println("(" + first + ") - (" + second + ") = " + subtracted);
     }
 
-    public static Pair<int[], Polynomial> ask(String name) {
+    public static Polynomial ask(String name) {
         var maxDegree = t.PromptInt("What is the degree of the " + name + " polynomial");
         var arr = t.PromptIntArr("Enter the numerical coefficients (from lowest term)", maxDegree + 1);
-        return new Pair(arr, new Polynomial(arr));
-    }
-
-    public static int[] calculate(int[] first, int[] second, BiFunction<Integer, Integer, Integer> calculateFunc) {
-        var max = Math.max(first.length, second.length);
-        var result = new int[max];
-        var fCounter = first.length;
-        var sCounter = second.length;
-        for (int i = max - 1; i > -1; i--) {
-            var left = --fCounter < 0 ? 0 : first[fCounter];
-            var right = --sCounter < 0 ? 0 : second[sCounter];
-            result[i] = calculateFunc.apply(left, right);
-        }
-        return result;
-    }
-
-    public static int[] add(int[] first, int[] second) {
-        return calculate(first, second, (x, y) -> x + y);
-    }
-
-    public static int[] subtract(int[] first, int[] second) {
-        return calculate(first, second, (x, y) -> x - y);
+        return new Polynomial(arr);
     }
 }
 
@@ -109,13 +88,36 @@ class Term {
 
 class Polynomial {
     public Polynomial(int[] coefficients) {
+        Coefficients = coefficients;
         Terms = new Term[coefficients.length];
         for (int i = 0; i < coefficients.length; i++) {
             Terms[i] = new Term(coefficients[i], coefficients.length - i - 1);
         }
     }
 
+    public int[] Coefficients;
     public Term[] Terms;
+
+    public static int[] calculate(int[] first, int[] second, BiFunction<Integer, Integer, Integer> calculateFunc) {
+        var max = Math.max(first.length, second.length);
+        var result = new int[max];
+        var fCounter = first.length;
+        var sCounter = second.length;
+        for (int i = max - 1; i > -1; i--) {
+            var left = --fCounter < 0 ? 0 : first[fCounter];
+            var right = --sCounter < 0 ? 0 : second[sCounter];
+            result[i] = calculateFunc.apply(left, right);
+        }
+        return result;
+    }
+
+    public Polynomial add(int[] coefficients) {
+        return new Polynomial(calculate(Coefficients, coefficients, (x, y) -> x + y));
+    }
+
+    public Polynomial subtract(int[] coefficients) {
+        return new Polynomial(calculate(Coefficients, coefficients, (x, y) -> x - y));
+    }
 
     @Override
     public String toString() {
