@@ -1,34 +1,33 @@
 import Board.Panel.Board
+import java.awt.GridLayout
 import javax.swing.JFrame
-import javax.swing.JMenuBar
-import javax.swing.JPanel
+import javax.swing.JSeparator
+import javax.swing.JTextField
+import javax.swing.SwingConstants
 
-class ScrabbleForm internal constructor() {
-    var panel: JPanel? = null
-    var menuBar: JMenuBar? = null
+fun main() {
+    ScrabbleForm()
+}
 
-    private val board = Board()
+class ScrabbleForm : JFrame {
+    var board = Board()
+    var textInput = JTextField()
 
-    init {
+    constructor() : super() {
         initializeGui()
     }
 
 
     fun initializeGui() {
+        contentPane.layout = GridLayout(3, 1)
 
-    }
+        contentPane.add(board)
+        contentPane.add(JSeparator(SwingConstants.VERTICAL))
+        contentPane.add(textInput)
 
-    companion object {
-
-        @JvmStatic
-        fun main(args: Array<String>) {
-            val frame = JFrame("Scrabble")
-            val board = ScrabbleForm().board
-            frame.contentPane = board
-            frame.defaultCloseOperation = JFrame.EXIT_ON_CLOSE
-            frame.addMouseListener(board)
-            frame.pack()
-            frame.isVisible = true
-        }
+        defaultCloseOperation = EXIT_ON_CLOSE
+        addMouseListener(board)
+        pack()
+        isVisible = true
     }
 }

@@ -2,6 +2,7 @@ package Board.Panel
 
 import Board.Tiles.*
 import Letter
+import Player
 import java.awt.Color
 import java.awt.Graphics
 import java.awt.event.MouseEvent
@@ -9,14 +10,16 @@ import java.awt.event.MouseListener
 import java.util.*
 import javax.swing.JPanel
 
-class Board : JPanel(), MouseListener {
+class Board : JPanel, MouseListener {
     private val spacing = 3
+
+    val firstPlayer = Player(1, 0, mutableListOf('a'), 0)
 
     private val squares = ArrayList<ArrayList<Tile>>()
     private val letters = ArrayList<ArrayList<Letter>>()
 
-    init {
-        this.buildSquaresList()
+    constructor() : super() {
+        buildSquaresList()
     }
 
     protected fun buildSquaresList() {
@@ -374,6 +377,7 @@ class Board : JPanel(), MouseListener {
                     width / squares.size - spacing,
                     height / squares.size - spacing
                 )
+                g.drawString(letters[i][j].letter.toString(), squares.size, squares.size)
 
             }
         }
