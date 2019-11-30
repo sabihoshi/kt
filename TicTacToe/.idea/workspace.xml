@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="43cc2fc0-5111-4154-bf6a-e95f12202d66" name="Default Changelist" comment="" />
+    <list default="true" id="43cc2fc0-5111-4154-bf6a-e95f12202d66" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/../Week 8/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../Week 8/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Week 8/src/Board/Panel/Board.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../Week 8/src/Board/Panel/Board.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Week 8/src/ScrabbleForm.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../Week 8/src/ScrabbleForm.kt" afterDir="false" />
+    </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -72,6 +76,7 @@
       <option name="presentableId" value="Default" />
       <updated>1574830801292</updated>
       <workItem from="1574830802911" duration="5427000" />
+      <workItem from="1575115662727" duration="20000" />
     </task>
     <servers />
   </component>
@@ -83,7 +88,9 @@
       <map>
         <entry key="MAIN">
           <value>
-            <State />
+            <State>
+              <option name="COLUMN_ORDER" />
+            </State>
           </value>
         </entry>
       </map>

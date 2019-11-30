@@ -1,8 +1,9 @@
+
 import Console.gotoXY
-import java.util.*
 import java.io.File
 import java.io.InputStream
 import java.nio.file.Paths
+import java.util.*
 
 enum class Direction {
     Down,
@@ -27,7 +28,7 @@ private val board = Array(BOARD_SIZE) {
         Letter('-', unknownPlayer, Pair(0, 0))
     }
 }
-private val availableLetters: LinkedList<Char> = object : LinkedList<Char>() {
+private val availableLetters = object : LinkedList<Char>() {
     init {
         addLetters(this, 'A', 9)
         addLetters(this, 'B', 2)

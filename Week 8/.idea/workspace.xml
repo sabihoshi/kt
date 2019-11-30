@@ -1,7 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="9315392b-85e6-4f91-a728-4e4cc3a82d13" name="Default Changelist" comment="" />
+    <list default="true" id="9315392b-85e6-4f91-a728-4e4cc3a82d13" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/kotlin_events_v2_0.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Board.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Player.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Tile.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/rack/HorizontalRack.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/rack/Rack.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/rack/VerticalRack.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../TicTacToe/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../TicTacToe/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Week 7/src/Scrabble.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../Week 7/src/Scrabble.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Week 8.iml" beforeDir="false" afterPath="$PROJECT_DIR$/Week 8.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Week 8/META-INF/Week 8.kotlin_module" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Week 8/META-INF/Week 8.kotlin_module" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Week 8/words_alpha.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Week 8/words_dictionary.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Board/Panel/Board.kt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Board/Tiles/Blue.kt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Board/Tiles/DarkBlue.kt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Board/Tiles/Pink.kt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Board/Tiles/Red.kt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Board/Tiles/Star.kt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Board/Tiles/Tile.kt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/ScrabbleForm.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/ScrabbleForm.kt" afterDir="false" />
+    </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -14,7 +37,9 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
+        <option value="Gradle Kotlin DSL Build Script" />
         <option value="Class" />
+        <option value="Kotlin File" />
       </list>
     </option>
   </component>
@@ -22,23 +47,29 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
   </component>
   <component name="ProjectId" id="1UAwxrwLDKtwMr6lmON1mHfO0aH" />
-  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
   <component name="PropertiesComponent">
+    <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
     <property name="Downloaded.Files.Path.Enabled" value="false" />
     <property name="Repository.Attach.Annotations" value="false" />
     <property name="Repository.Attach.JavaDocs" value="false" />
     <property name="Repository.Attach.Sources" value="false" />
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="UI_DESIGNER_EDITOR_MODE.UIDesignerToolWindowManager.SHOW" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="last_opened_file_path" value="$USER_HOME$/Downloads/ScrabbleGame-master/ScrabbleGame-master" />
-    <property name="project.structure.last.edited" value="Problems" />
+    <property name="last_directory_selection" value="$PROJECT_DIR$/src" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/kotlin-events-v2.0.jar!/" />
+    <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
     <property name="restartRequiresConfirmation" value="false" />
   </component>
   <component name="RecentsManager">
     <key name="MoveKotlinTopLevelDeclarationsDialog.RECENTS_KEY">
+      <recent name="Rack" />
       <recent name="" />
     </key>
   </component>
@@ -103,6 +134,8 @@
       <workItem from="1574812958564" duration="1429000" />
       <workItem from="1574814810202" duration="11986000" />
       <workItem from="1574994604035" duration="5006000" />
+      <workItem from="1575115684335" duration="16411000" />
+      <workItem from="1575137107724" duration="9693000" />
     </task>
     <servers />
   </component>
