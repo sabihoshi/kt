@@ -4,7 +4,6 @@ import rack.Rack
 import java.awt.Color
 import java.awt.Dimension
 import java.awt.GridLayout
-import java.util.*
 import javax.swing.JFrame
 
 
@@ -45,8 +44,8 @@ class ScrabbleForm : JFrame("Scrabble") {
     }
 
     var board = Board(this)
-    var playerOne = Player(Color.GREEN, 1)
-    var playerOneRack: Rack = HorizontalRack(playerOne, getLetters(7))
+    var playerOne: Player
+    var playerOneRack: Rack
 
     val hasTilePressed
         get() = tilePressed != null
@@ -60,14 +59,14 @@ class ScrabbleForm : JFrame("Scrabble") {
         }
     }
 
-    fun getLetters(amount: Int): List<Char> {
+    fun getLetters(amount: Int): ArrayList<Char> {
         val result = ArrayList<Char>(amount)
         repeat(amount) {
             if(availableLetters.isEmpty())
-                return result.sorted()
+                return result
             result.add(availableLetters.removeAt(0))
         }
-        return result.sorted()
+        return result
     }
 
 
@@ -75,6 +74,10 @@ class ScrabbleForm : JFrame("Scrabble") {
     var rackPressed: Rack? = null
 
     init {
+        availableLetters.shuffle()
+        playerOne = Player(Color.GREEN, 1)
+        playerOneRack = HorizontalRack(playerOne, getLetters(7), this)
+
         preferredSize = Dimension(500, 510)
         contentPane.layout = GridLayout(2, 1)
 

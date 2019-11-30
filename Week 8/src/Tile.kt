@@ -55,7 +55,7 @@ class Tile(val color: Color, val wordMultiplier: Int, val letterMultiplier: Int,
         button.addActionListener { e ->
             val button = e.source as JButton
             if (parent.hasRackedPressed) {
-                button.text = parent.rackPressed?.characterPressed?.toString()
+                button.text = parent.rackPressed?.buttonPressed?.text.toString()
 
                 parent.rackPressed = null
                 parent.tilePressed = null
