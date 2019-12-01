@@ -20,7 +20,7 @@ class TileFactory(val parent: ScrabbleForm) {
 }
 
 class Tile(val color: Color, val wordMultiplier: Int, val letterMultiplier: Int, val parent: ScrabbleForm) : JButton() {
-
+    var coordinates: Pair<Int, Int>? = null
     private var isMultiplierUnused = true
 
     fun getLetterMult(): Int {
@@ -52,17 +52,14 @@ class Tile(val color: Color, val wordMultiplier: Int, val letterMultiplier: Int,
         addActionListener { e ->
             val button = e.source as JButton
             parent.removeTilePressed()
-
             if (parent.tilePressed != this) {
                 parent.tilePressed = this
                 button.border = LineBorder(Color.CYAN)
 
-            if (parent.hasRackedPressed) {
-                button.text = parent.rackPressed?.buttonPressed?.text
-
-                parent.removeRackPressed(true)
-                parent.removeTilePressed()
-            }}
+                if (parent.hasRackedPressed) {
+                    parent.placeTile()
+                }
+            }
         }
     }
 

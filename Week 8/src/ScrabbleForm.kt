@@ -7,6 +7,10 @@ import java.awt.GridLayout
 import javax.swing.JFrame
 import javax.swing.border.LineBorder
 
+public const val BOARD_SIZE = 15
+public const val RACK_SIZE = 7
+public const val MAX_PLAYERS = 4
+public const val MIN_PLAYERS = 2
 
 fun main() {
     ScrabbleForm()
@@ -84,6 +88,42 @@ class ScrabbleForm : JFrame("Scrabble") {
         rackPressed = null
     }
 
+    fun placeTile() {
+        tilePressed?.let { tilesPlaced.add(it) }
+
+        // Disable buttons depending on how many tiles has been placed
+        when (tilesPlaced.size) {
+            1 -> {
+                board.disableAllButtons()
+                tilesPlaced[0].coordinates?.let {
+                    board.enableButtons(Board.Orientation.Horizontal, it)
+                    board.enableButtons(Board.Orientation.Vertical, it)
+                }
+            }
+            2 -> {
+                // Horizontally the same
+                if (tilesPlaced.map { t -> t.coordinates?.first }.distinct().size == 1) {
+                    board.disableAllButtons()
+                    tilesPlaced[0].coordinates?.let {
+                        board.enableButtons(Board.Orientation.Horizontal, it)
+                    }
+                }
+                // Vertically the same
+                else if (tilesPlaced.map { t -> t.coordinates?.second }.distinct().size == 1) {
+                    board.disableAllButtons()
+                    tilesPlaced[0].coordinates?.let {
+                        board.enableButtons(Board.Orientation.Vertical, it)
+                    }
+                }
+            }
+        }
+
+        tilePressed?.text = rackPressed?.buttonPressed?.text
+        removeRackPressed(true)
+        removeTilePressed()
+    }
+
+    var tilesPlaced: ArrayList<Tile> = arrayListOf()
     var tilePressed: Tile? = null
     var rackPressed: Rack? = null
 

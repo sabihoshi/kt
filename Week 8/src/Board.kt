@@ -3,13 +3,8 @@ import java.awt.GridLayout
 import java.util.*
 import javax.swing.JPanel
 
-private const val BOARD_SIZE = 15
-private const val RACK_SIZE = 7
-private const val MAX_PLAYERS = 4
-private const val MIN_PLAYERS = 2
 
 class Board(val parent: ScrabbleForm) : JPanel() {
-
     enum class Direction {
         Down,
         Across,
@@ -17,6 +12,7 @@ class Board(val parent: ScrabbleForm) : JPanel() {
         Backwards
     }
 
+    enum class Orientation { Vertical, Horizontal }
 
 
     val tiles = ArrayList<ArrayList<Tile>>()
@@ -27,6 +23,32 @@ class Board(val parent: ScrabbleForm) : JPanel() {
     init {
         layout = GridLayout(BOARD_SIZE, BOARD_SIZE)
         initTiles()
+    }
+
+    fun disableAllButtons() {
+        for (row in tiles) {
+            for (tile in row) {
+                tile.isEnabled = false
+            }
+        }
+    }
+
+    fun enableButtons(orientation: Orientation, coordinates: Pair<Int, Int>) {
+        for (tile in getTiles(orientation, coordinates)) {
+            tile.isEnabled = true
+        }
+    }
+
+    fun getTiles(orientation: Orientation, coordinates: Pair<Int, Int>) = sequence {
+        if (orientation == Orientation.Horizontal) {
+            for (i in tiles.indices) {
+                yield(tiles[coordinates.first][i])
+            }
+        } else {
+            for (i in tiles.indices) {
+                yield(tiles[i][coordinates.second])
+            }
+        }
     }
 
     private fun initTiles() {
@@ -365,9 +387,10 @@ class Board(val parent: ScrabbleForm) : JPanel() {
             )
         )
 
-        for(row in tiles) {
-            for(tile in row) {
-                add(tile)
+        for (x in tiles.indices) {
+            for (y in tiles[x].indices) {
+                tiles[x][y].coordinates = Pair(x, y)
+                add(tiles[x][y])
             }
         }
     }
