@@ -1,4 +1,3 @@
-import kotlinx.event.event
 import java.awt.Color
 import javax.swing.JButton
 import javax.swing.border.LineBorder
@@ -20,9 +19,7 @@ class TileFactory(val parent: ScrabbleForm) {
     }
 }
 
-class Tile(val color: Color, val wordMultiplier: Int, val letterMultiplier: Int, val parent: ScrabbleForm) {
-    val event = event<Tile>()
-    val button = JButton()
+class Tile(val color: Color, val wordMultiplier: Int, val letterMultiplier: Int, val parent: ScrabbleForm) : JButton() {
 
     private var isMultiplierUnused = true
 
@@ -51,21 +48,21 @@ class Tile(val color: Color, val wordMultiplier: Int, val letterMultiplier: Int,
     )
 
     init {
-        button.background = color
-        button.addActionListener { e ->
+        background = color
+        addActionListener { e ->
             val button = e.source as JButton
-            if (parent.hasRackedPressed) {
-                button.text = parent.rackPressed?.buttonPressed?.text.toString()
+            parent.removeTilePressed()
 
-                parent.rackPressed = null
-                parent.tilePressed = null
-            } else {
-                parent.tilePressed?.button?.border = LineBorder(Color.GRAY)
+            if (parent.tilePressed != this) {
                 parent.tilePressed = this
-
-                button.isBorderPainted = true
                 button.border = LineBorder(Color.CYAN)
-            }
+
+            if (parent.hasRackedPressed) {
+                button.text = parent.rackPressed?.buttonPressed?.text
+
+                parent.removeRackPressed(true)
+                parent.removeTilePressed()
+            }}
         }
     }
 

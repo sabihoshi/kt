@@ -2,7 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="9315392b-85e6-4f91-a728-4e4cc3a82d13" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/discord.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/fill/Node.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/rack/Letter.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Week 8/META-INF/Week 8.kotlin_module" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Week 8/META-INF/Week 8.kotlin_module" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Board.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/Board.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/ScrabbleForm.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/ScrabbleForm.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Tile.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/Tile.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/rack/HorizontalRack.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/rack/HorizontalRack.kt" afterDir="false" />
@@ -24,6 +29,7 @@
         <option value="Gradle Kotlin DSL Build Script" />
         <option value="Class" />
         <option value="Kotlin File" />
+        <option value="Kotlin Class" />
       </list>
     </option>
   </component>
@@ -46,10 +52,11 @@
     <property name="aspect.path.notification.shown" value="true" />
     <property name="last_directory_selection" value="$PROJECT_DIR$/src" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/src/kotlin-events-v2.0.jar!/" />
-    <property name="project.structure.last.edited" value="Modules" />
+    <property name="project.structure.last.edited" value="Project" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
     <property name="restartRequiresConfirmation" value="false" />
+    <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
   </component>
   <component name="RecentsManager">
     <key name="MoveKotlinTopLevelDeclarationsDialog.RECENTS_KEY">
@@ -119,7 +126,10 @@
       <workItem from="1574814810202" duration="11986000" />
       <workItem from="1574994604035" duration="5006000" />
       <workItem from="1575115684335" duration="16411000" />
-      <workItem from="1575137107724" duration="13326000" />
+      <workItem from="1575137107724" duration="19179000" />
+      <workItem from="1575167269913" duration="1067000" />
+      <workItem from="1575168503255" duration="6512000" />
+      <workItem from="1575178816345" duration="3388000" />
     </task>
     <servers />
   </component>

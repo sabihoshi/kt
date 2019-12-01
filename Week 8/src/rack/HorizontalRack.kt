@@ -3,7 +3,7 @@ import Player
 import ScrabbleForm
 import java.awt.GridLayout
 
-public class HorizontalRack(player: Player, letters: ArrayList<Char>, parent: ScrabbleForm) : Rack(player, letters,
+public class HorizontalRack(player: Player, letters: ArrayList<Letter>, parent: ScrabbleForm) : Rack(player, letters,
     parent
 ) {
     init {

@@ -1,10 +1,11 @@
-
 import rack.HorizontalRack
+import rack.Letter
 import rack.Rack
 import java.awt.Color
 import java.awt.Dimension
 import java.awt.GridLayout
 import javax.swing.JFrame
+import javax.swing.border.LineBorder
 
 
 fun main() {
@@ -59,16 +60,29 @@ class ScrabbleForm : JFrame("Scrabble") {
         }
     }
 
-    fun getLetters(amount: Int): ArrayList<Char> {
-        val result = ArrayList<Char>(amount)
+    fun getLetters(amount: Int): ArrayList<Letter> {
+        val result = ArrayList<Letter>(amount)
         repeat(amount) {
-            if(availableLetters.isEmpty())
+            if (availableLetters.isEmpty())
                 return result
-            result.add(availableLetters.removeAt(0))
+            result.add(Letter(availableLetters.removeAt(0)))
         }
         return result
     }
 
+    fun removeTilePressed() {
+        tilePressed?.border = LineBorder(Color.GRAY)
+        tilePressed = null
+    }
+
+    fun removeRackPressed(delete: Boolean = false) {
+        if (delete) {
+            rackPressed?.buttons?.remove(rackPressed?.buttonPressed)
+            rackPressed?.remove(rackPressed?.buttonPressed)
+        } else rackPressed?.buttonPressed?.border = LineBorder(Color.GRAY)
+        rackPressed?.buttonPressed = null
+        rackPressed = null
+    }
 
     var tilePressed: Tile? = null
     var rackPressed: Rack? = null

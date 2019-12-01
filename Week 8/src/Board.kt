@@ -367,7 +367,7 @@ class Board(val parent: ScrabbleForm) : JPanel() {
 
         for(row in tiles) {
             for(tile in row) {
-                add(tile.button)
+                add(tile)
             }
         }
     }
