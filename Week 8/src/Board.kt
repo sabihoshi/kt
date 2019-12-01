@@ -1,4 +1,6 @@
+
 import TileFactory.Type
+import fill.SearchNode
 import java.awt.GridLayout
 import java.util.*
 import javax.swing.JPanel
@@ -13,6 +15,7 @@ class Board(val parent: ScrabbleForm) : JPanel() {
     }
 
     enum class Orientation { Vertical, Horizontal }
+
 
 
     val tiles = ArrayList<ArrayList<Tile>>()
@@ -36,6 +39,16 @@ class Board(val parent: ScrabbleForm) : JPanel() {
     fun enableButtons(orientation: Orientation, coordinates: Pair<Int, Int>) {
         for (tile in getTiles(orientation, coordinates)) {
             tile.isEnabled = true
+        }
+    }
+
+    var nodes = HashMap<Triple<Int, Int, Orientation>, SearchNode>()
+
+    fun validateWords(letters: ArrayList<Tile>) {
+        for(letter in letters) {
+            if(letter.coordinates != null && letter.orientation != null) {
+                var validate = SearchNode(this, letter.coordinates!!, letter.orientation!!)
+            }
         }
     }
 

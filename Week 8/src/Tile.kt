@@ -21,6 +21,7 @@ class TileFactory(val parent: ScrabbleForm) {
 
 class Tile(val color: Color, val wordMultiplier: Int, val letterMultiplier: Int, val parent: ScrabbleForm) : JButton() {
     var coordinates: Pair<Int, Int>? = null
+    var orientation: Board.Orientation? = null
     private var isMultiplierUnused = true
 
     fun getLetterMult(): Int {

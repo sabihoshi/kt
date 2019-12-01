@@ -2,12 +2,13 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="9315392b-85e6-4f91-a728-4e4cc3a82d13" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/src/foo.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/Week 8/META-INF/Week 8.kotlin_module" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Week 8/META-INF/Week 8.kotlin_module" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Board.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/Board.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/ScrabbleForm.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/ScrabbleForm.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Tile.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/Tile.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/rack/Rack.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/rack/Rack.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/fill/Node.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/fill/SearchNode.kt" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -22,9 +23,9 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Gradle Kotlin DSL Build Script" />
-        <option value="Class" />
         <option value="Kotlin File" />
         <option value="Kotlin Class" />
+        <option value="Class" />
       </list>
     </option>
   </component>
@@ -86,6 +87,19 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="FooKt" type="JetRunConfigurationType" factoryName="Kotlin" temporary="true" nameIsGenerated="true">
+      <module name="Week 8" />
+      <option name="VM_PARAMETERS" />
+      <option name="PROGRAM_PARAMETERS" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="MAIN_CLASS_NAME" value="FooKt" />
+      <option name="WORKING_DIRECTORY" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="ScrabbleFormKt" type="JetRunConfigurationType" factoryName="Kotlin" temporary="true" nameIsGenerated="true">
       <module name="Week 8" />
       <option name="VM_PARAMETERS" />
@@ -102,6 +116,7 @@
     <recent_temporary>
       <list>
         <item itemvalue="Kotlin.ScrabbleFormKt" />
+        <item itemvalue="Kotlin.FooKt" />
         <item itemvalue="Application.ScrabbleForm" />
         <item itemvalue="Application.Scrabble" />
       </list>
@@ -124,7 +139,8 @@
       <workItem from="1575137107724" duration="19179000" />
       <workItem from="1575167269913" duration="1067000" />
       <workItem from="1575168503255" duration="6512000" />
-      <workItem from="1575178816345" duration="9360000" />
+      <workItem from="1575178816345" duration="17149000" />
+      <workItem from="1575215065480" duration="7752000" />
     </task>
     <servers />
   </component>

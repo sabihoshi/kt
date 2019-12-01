@@ -4,6 +4,7 @@ import rack.Rack
 import java.awt.Color
 import java.awt.Dimension
 import java.awt.GridLayout
+import javax.swing.JButton
 import javax.swing.JFrame
 import javax.swing.border.LineBorder
 
@@ -47,10 +48,12 @@ class ScrabbleForm : JFrame("Scrabble") {
             addLetters(this, 'Z', 1)
         }
     }
+    private val validWords: ArrayList<String> = arrayListOf()
 
     var board = Board(this)
     var playerOne: Player
     var playerOneRack: Rack
+    var confirm = JButton()
 
     val hasTilePressed
         get() = tilePressed != null
@@ -89,41 +92,42 @@ class ScrabbleForm : JFrame("Scrabble") {
     }
 
     fun placeTile() {
-        tilePressed?.let { tilesPlaced.add(it) }
+        tilePressed?.let { lettersPlaced.add(it) }
 
         // Disable buttons depending on how many tiles has been placed
-        when (tilesPlaced.size) {
+        when (lettersPlaced.size) {
             1 -> {
                 board.disableAllButtons()
-                tilesPlaced[0].coordinates?.let {
+                lettersPlaced[0].coordinates?.let {
                     board.enableButtons(Board.Orientation.Horizontal, it)
                     board.enableButtons(Board.Orientation.Vertical, it)
                 }
             }
             2 -> {
                 // Horizontally the same
-                if (tilesPlaced.map { t -> t.coordinates?.first }.distinct().size == 1) {
+                if (lettersPlaced.map { t -> t.coordinates?.first }.distinct().size == 1) {
                     board.disableAllButtons()
-                    tilesPlaced[0].coordinates?.let {
+                    lettersPlaced[0].coordinates?.let {
                         board.enableButtons(Board.Orientation.Horizontal, it)
                     }
                 }
                 // Vertically the same
-                else if (tilesPlaced.map { t -> t.coordinates?.second }.distinct().size == 1) {
+                else if (lettersPlaced.map { t -> t.coordinates?.second }.distinct().size == 1) {
                     board.disableAllButtons()
-                    tilesPlaced[0].coordinates?.let {
+                    lettersPlaced[0].coordinates?.let {
                         board.enableButtons(Board.Orientation.Vertical, it)
                     }
                 }
             }
         }
 
+        tilePressed?.let { lettersPlaced.add(it) }
         tilePressed?.text = rackPressed?.buttonPressed?.text
         removeRackPressed(true)
         removeTilePressed()
     }
 
-    var tilesPlaced: ArrayList<Tile> = arrayListOf()
+    private var lettersPlaced: java.util.ArrayList<Tile> = arrayListOf()
     var tilePressed: Tile? = null
     var rackPressed: Rack? = null
 
@@ -132,12 +136,20 @@ class ScrabbleForm : JFrame("Scrabble") {
         playerOne = Player(Color.GREEN, 1)
         playerOneRack = HorizontalRack(playerOne, getLetters(7), this)
 
+        confirm.text = "Confirm Move"
+        confirm.addActionListener{e ->
+            val button = e.source as JButton
+            board.validateWords(lettersPlaced)
+        }
+
+        playerOneRack.preferredSize = Dimension(500, 10)
         preferredSize = Dimension(500, 510)
-        contentPane.layout = GridLayout(2, 1)
+
+        contentPane.layout = GridLayout(3, 1)
 
         contentPane.add(board)
-        playerOneRack.preferredSize = Dimension(500, 10)
         contentPane.add(playerOneRack)
+        contentPane.add(confirm)
 
         defaultCloseOperation = EXIT_ON_CLOSE
         pack()
