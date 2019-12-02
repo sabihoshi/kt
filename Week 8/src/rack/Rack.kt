@@ -11,16 +11,29 @@ const val RACK_SIZE = 7
 
 abstract class Rack(
     val player: Player,
-    val letters: ArrayList<Letter>,
     val parent: ScrabbleForm
 ) : JPanel() {
     var buttonPressed: JButton? = null
     val buttons: ArrayList<JButton> = arrayListOf()
 
     init {
-        for (letter in letters) {
+        fill()
+    }
+
+    fun fill() {
+        for (letter in getLetters(RACK_SIZE - buttons.size)) {
             addButton(letter)
         }
+    }
+
+    private fun getLetters(amount: Int): ArrayList<Letter> {
+        val result = ArrayList<Letter>(amount)
+        repeat(amount) {
+            if (parent.availableLetters.isEmpty())
+                return result
+            result.add(Letter(parent.availableLetters.removeAt(0)))
+        }
+        return result
     }
 
     private fun addButton(letter: Letter) {
@@ -32,9 +45,9 @@ abstract class Rack(
         button.addActionListener { e ->
             val source = e.source as JButton
             parent.removeRack()
-            if (parent.rackPressed != this) {
+            if (parent.pressedRack != this) {
                 buttonPressed = source
-                parent.rackPressed = this
+                parent.pressedRack = this
                 source.border = LineBorder(Color.CYAN)
 
                 if (parent.hasTilePressed) {

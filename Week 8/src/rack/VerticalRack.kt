@@ -1,9 +1,11 @@
 package rack
+
 import Player
 import ScrabbleForm
 import java.awt.GridLayout
 
-public class VerticalRack(player: Player, letters: ArrayList<Letter>, parent: ScrabbleForm) : Rack(player, letters,
+class VerticalRack(player: Player, parent: ScrabbleForm) : Rack(
+    player,
     parent
 ) {
     init {

@@ -50,6 +50,7 @@ class Board(val parent: ScrabbleForm) : JPanel() {
                 println("${validate.min} - ${validate.max}: ${validate.getWords().first}&${validate.getWords().second}")
             }
         }
+        println("================================")
     }
 
     fun getTiles(orientation: Orientation, coordinates: Pair<Int, Int>) = sequence {

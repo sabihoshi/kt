@@ -1,5 +1,4 @@
 import rack.HorizontalRack
-import rack.Letter
 import rack.Rack
 import java.awt.Color
 import java.awt.Dimension
@@ -18,7 +17,7 @@ fun main() {
 }
 
 class ScrabbleForm : JFrame("Scrabble") {
-    private val availableLetters = object : ArrayList<Char>() {
+    val availableLetters = object : ArrayList<Char>() {
         init {
             addLetters(this, 'A', 9)
             addLetters(this, 'B', 2)
@@ -56,10 +55,10 @@ class ScrabbleForm : JFrame("Scrabble") {
     var confirm = JButton()
 
     val hasTilePressed
-        get() = tilePressed != null
+        get() = pressedTile != null
 
     val hasRackedPressed
-        get() = rackPressed != null
+        get() = pressedRack != null
 
     fun addLetters(arr: MutableList<Char>, c: Char, amount: Int) {
         for (i in 0 until amount) {
@@ -67,15 +66,7 @@ class ScrabbleForm : JFrame("Scrabble") {
         }
     }
 
-    fun getLetters(amount: Int): ArrayList<Letter> {
-        val result = ArrayList<Letter>(amount)
-        repeat(amount) {
-            if (availableLetters.isEmpty())
-                return result
-            result.add(Letter(availableLetters.removeAt(0)))
-        }
-        return result
-    }
+
 
     fun confirmMove() {
         board.enableAllButtons(true)
@@ -86,24 +77,22 @@ class ScrabbleForm : JFrame("Scrabble") {
     }
 
     fun removeTile() {
-        tilePressed?.border = LineBorder(Color.GRAY)
-        tilePressed = null
+        pressedTile?.border = LineBorder(Color.GRAY)
+        pressedTile = null
     }
 
     fun removeRack(delete: Boolean = false) {
         if (delete) {
-            rackPressed?.buttons?.remove(rackPressed?.buttonPressed)
-            rackPressed?.remove(rackPressed?.buttonPressed)
-        } else rackPressed?.buttonPressed?.border = LineBorder(Color.GRAY)
-        rackPressed?.buttonPressed = null
-        rackPressed = null
+            pressedRack?.buttons?.remove(pressedRack?.buttonPressed)
+            pressedRack?.remove(pressedRack?.buttonPressed)
+        } else pressedRack?.buttonPressed?.border = LineBorder(Color.GRAY)
+        pressedRack?.buttonPressed = null
+        pressedRack = null
     }
 
     fun placeTile() {
-        tilePressed?.let { tilesPlaced.add(it) }
-        tilePressed?.text = rackPressed?.buttonPressed?.text
-        removeRack(true)
-        removeTile()
+        pressedTile?.let { tilesPlaced.add(it) }
+        pressedTile?.text = pressedRack?.buttonPressed?.text
 
         // Disable buttons depending on how many tiles has been placed
         when (tilesPlaced.size) {
@@ -124,29 +113,36 @@ class ScrabbleForm : JFrame("Scrabble") {
                     addOrientation(Board.Orientation.Vertical)
                 }
             }
+            else -> pressedTile?.orientation = orientation
         }
+
+        pressedRack?.fill()
+        removeRack(true)
+        removeTile()
     }
 
     private fun addOrientation(orientation: Board.Orientation) {
+        this.orientation = orientation
         board.enableAllButtons(false)
         board.enableButtons(orientation, tilesPlaced[0].coordinates!!)
-        for(tile in tilesPlaced) {
+        for (tile in tilesPlaced) {
             tile.orientation = orientation
         }
     }
 
+    private var orientation: Board.Orientation? = null
     private var tilesSearched: ArrayList<Tile> = arrayListOf()
     private var tilesPlaced: ArrayList<Tile> = arrayListOf()
-    var tilePressed: Tile? = null
-    var rackPressed: Rack? = null
+    var pressedTile: Tile? = null
+    var pressedRack: Rack? = null
 
     init {
         availableLetters.shuffle()
         playerOne = Player(Color.GREEN, 1)
-        playerOneRack = HorizontalRack(playerOne, getLetters(7), this)
+        playerOneRack = HorizontalRack(playerOne, this)
 
         confirm.text = "Confirm Move"
-        confirm.addActionListener{_ -> confirmMove()}
+        confirm.addActionListener { _ -> confirmMove() }
 
         playerOneRack.preferredSize = Dimension(500, 10)
         preferredSize = Dimension(500, 510)
