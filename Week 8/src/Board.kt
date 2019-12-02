@@ -16,8 +16,6 @@ class Board(val parent: ScrabbleForm) : JPanel() {
 
     enum class Orientation { Vertical, Horizontal }
 
-
-
     val tiles = ArrayList<ArrayList<Tile>>()
     val player = ArrayList<Player>()
 
@@ -28,17 +26,17 @@ class Board(val parent: ScrabbleForm) : JPanel() {
         initTiles()
     }
 
-    fun disableAllButtons() {
+    fun enableAllButtons(isEnabled: Boolean = true) {
         for (row in tiles) {
             for (tile in row) {
-                tile.isEnabled = false
+                if(tile.text == "") tile.isEnabled = isEnabled
             }
         }
     }
 
     fun enableButtons(orientation: Orientation, coordinates: Pair<Int, Int>) {
         for (tile in getTiles(orientation, coordinates)) {
-            tile.isEnabled = true
+            if(tile.text == "") tile.isEnabled = true
         }
     }
 
@@ -47,7 +45,9 @@ class Board(val parent: ScrabbleForm) : JPanel() {
     fun validateWords(letters: ArrayList<Tile>) {
         for(letter in letters) {
             if(letter.coordinates != null && letter.orientation != null) {
-                var validate = SearchNode(this, letter.coordinates!!, letter.orientation!!)
+                val validate = SearchNode(this, letter.coordinates!!, letter.orientation!!)
+                validate.search()
+                println("${validate.min} - ${validate.max}: ${validate.getWords().first}&${validate.getWords().second}")
             }
         }
     }

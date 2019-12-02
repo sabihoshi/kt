@@ -52,7 +52,7 @@ class Tile(val color: Color, val wordMultiplier: Int, val letterMultiplier: Int,
         background = color
         addActionListener { e ->
             val button = e.source as JButton
-            parent.removeTilePressed()
+            parent.removeTile()
             if (parent.tilePressed != this) {
                 parent.tilePressed = this
                 button.border = LineBorder(Color.CYAN)

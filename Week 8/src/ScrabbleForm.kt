@@ -77,12 +77,20 @@ class ScrabbleForm : JFrame("Scrabble") {
         return result
     }
 
-    fun removeTilePressed() {
+    fun confirmMove() {
+        board.enableAllButtons(true)
+        board.validateWords(tilesPlaced)
+
+        tilesPlaced.clear()
+        tilesSearched.addAll(tilesPlaced)
+    }
+
+    fun removeTile() {
         tilePressed?.border = LineBorder(Color.GRAY)
         tilePressed = null
     }
 
-    fun removeRackPressed(delete: Boolean = false) {
+    fun removeRack(delete: Boolean = false) {
         if (delete) {
             rackPressed?.buttons?.remove(rackPressed?.buttonPressed)
             rackPressed?.remove(rackPressed?.buttonPressed)
@@ -92,42 +100,43 @@ class ScrabbleForm : JFrame("Scrabble") {
     }
 
     fun placeTile() {
-        tilePressed?.let { lettersPlaced.add(it) }
+        tilePressed?.let { tilesPlaced.add(it) }
+        tilePressed?.text = rackPressed?.buttonPressed?.text
+        removeRack(true)
+        removeTile()
 
         // Disable buttons depending on how many tiles has been placed
-        when (lettersPlaced.size) {
+        when (tilesPlaced.size) {
             1 -> {
-                board.disableAllButtons()
-                lettersPlaced[0].coordinates?.let {
+                board.enableAllButtons(false)
+                tilesPlaced[0].coordinates?.let {
                     board.enableButtons(Board.Orientation.Horizontal, it)
                     board.enableButtons(Board.Orientation.Vertical, it)
                 }
             }
             2 -> {
                 // Horizontally the same
-                if (lettersPlaced.map { t -> t.coordinates?.first }.distinct().size == 1) {
-                    board.disableAllButtons()
-                    lettersPlaced[0].coordinates?.let {
-                        board.enableButtons(Board.Orientation.Horizontal, it)
-                    }
+                if (tilesPlaced.map { t -> t.coordinates?.first }.distinct().size == 1) {
+                    addOrientation(Board.Orientation.Horizontal)
                 }
                 // Vertically the same
-                else if (lettersPlaced.map { t -> t.coordinates?.second }.distinct().size == 1) {
-                    board.disableAllButtons()
-                    lettersPlaced[0].coordinates?.let {
-                        board.enableButtons(Board.Orientation.Vertical, it)
-                    }
+                else if (tilesPlaced.map { t -> t.coordinates?.second }.distinct().size == 1) {
+                    addOrientation(Board.Orientation.Vertical)
                 }
             }
         }
-
-        tilePressed?.let { lettersPlaced.add(it) }
-        tilePressed?.text = rackPressed?.buttonPressed?.text
-        removeRackPressed(true)
-        removeTilePressed()
     }
 
-    private var lettersPlaced: java.util.ArrayList<Tile> = arrayListOf()
+    private fun addOrientation(orientation: Board.Orientation) {
+        board.enableAllButtons(false)
+        board.enableButtons(orientation, tilesPlaced[0].coordinates!!)
+        for(tile in tilesPlaced) {
+            tile.orientation = orientation
+        }
+    }
+
+    private var tilesSearched: ArrayList<Tile> = arrayListOf()
+    private var tilesPlaced: ArrayList<Tile> = arrayListOf()
     var tilePressed: Tile? = null
     var rackPressed: Rack? = null
 
@@ -137,10 +146,7 @@ class ScrabbleForm : JFrame("Scrabble") {
         playerOneRack = HorizontalRack(playerOne, getLetters(7), this)
 
         confirm.text = "Confirm Move"
-        confirm.addActionListener{e ->
-            val button = e.source as JButton
-            board.validateWords(lettersPlaced)
-        }
+        confirm.addActionListener{_ -> confirmMove()}
 
         playerOneRack.preferredSize = Dimension(500, 10)
         preferredSize = Dimension(500, 510)

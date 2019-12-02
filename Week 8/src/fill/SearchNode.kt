@@ -9,23 +9,23 @@ class SearchNode(val board: Board, var start: Pair<Int, Int>, val orientation: B
     }
 
 
-    var left: Pair<Int, Int> = start
-    var right: Pair<Int, Int> = start
+    var min: Pair<Int, Int> = start
+    var max: Pair<Int, Int> = start
     var triple = Triple(start.first, start.second, orientation)
 
     fun seekGenerator(direction: Direction, start: Pair<Int, Int>) = sequence {
         when (direction) {
-            Direction.Right -> for (i in start.second until BOARD_SIZE) {
-                yield(Pair(start.first, start.second + i))
+            Direction.Right -> for (i in start.second..BOARD_SIZE) {
+                yield(Pair(start.first, i))
             }
-            Direction.Left -> for (i in 0 until start.second) {
-                yield(Pair(start.first, start.second - i))
+            Direction.Left -> for (i in start.second downTo 0) {
+                yield(Pair(start.first, i))
             }
-            Direction.Down -> for (i in start.first until BOARD_SIZE) {
-                yield(Pair(start.first + i, start.second))
+            Direction.Down -> for (i in start.first..BOARD_SIZE) {
+                yield(Pair(i, start.second))
             }
-            Direction.Up -> for (i in 0 until start.first) {
-                yield(Pair(start.first - i, start.second))
+            Direction.Up -> for (i in start.first downTo 0) {
+                yield(Pair(i, start.second))
             }
         }
     }
@@ -47,6 +47,24 @@ class SearchNode(val board: Board, var start: Pair<Int, Int>, val orientation: B
 
     }
 
+    // Words have forward and backward
+    fun getWords(): Pair<String, String> {
+        val sb = StringBuilder()
+
+        if(orientation == Board.Orientation.Horizontal) {
+            for(i in min.second..max.second) {
+                sb.append(board.tiles[min.first][i].text)
+            }
+        } else {
+            for(i in min.first..max.first) {
+                sb.append(board.tiles[i][min.first].text)
+            }
+        }
+
+        val ret = sb.toString()
+        return Pair(ret, ret.reversed())
+    }
+
     private fun reverse(orientation: Board.Orientation): Board.Orientation {
         return if (orientation == Board.Orientation.Vertical) Board.Orientation.Horizontal
         else Board.Orientation.Horizontal
@@ -54,19 +72,21 @@ class SearchNode(val board: Board, var start: Pair<Int, Int>, val orientation: B
 
     private fun modifyLeft(coordinates: Sequence<Pair<Int, Int>>) {
         for (coordinate in coordinates) {
+            println("searched for [${coordinate.first}][${coordinate.second}]")
             if (board.tiles[coordinate.first][coordinate.second].text != "") {
-                left = Pair(coordinate.first, coordinate.second)
-                addNode(left, orientation)
-            }
+                min = Pair(coordinate.first, coordinate.second)
+                addNode(min, orientation)
+            } else break
         }
     }
 
     private fun modifyRight(coordinates: Sequence<Pair<Int, Int>>) {
         for (coordinate in coordinates) {
+            println("searched for [${coordinate.first}][${coordinate.second}]")
             if (board.tiles[coordinate.first][coordinate.second].text != "") {
-                right = Pair(coordinate.first, coordinate.second)
-                addNode(right, reverse(orientation))
-            }
+                max = Pair(coordinate.first, coordinate.second)
+                addNode(max, reverse(orientation))
+            } else break
         }
     }
 

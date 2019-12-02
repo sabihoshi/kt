@@ -31,7 +31,7 @@ abstract class Rack(
 
         button.addActionListener { e ->
             val source = e.source as JButton
-            parent.removeRackPressed()
+            parent.removeRack()
             if (parent.rackPressed != this) {
                 buttonPressed = source
                 parent.rackPressed = this
