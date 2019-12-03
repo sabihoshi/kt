@@ -1,16 +1,20 @@
+
 import rack.HorizontalRack
 import rack.Rack
+import rack.VerticalRack
 import java.awt.Color
 import java.awt.Dimension
+import java.awt.FlowLayout
 import java.awt.GridLayout
 import javax.swing.JButton
 import javax.swing.JFrame
+import javax.swing.JPanel
 import javax.swing.border.LineBorder
 
-public const val BOARD_SIZE = 15
-public const val RACK_SIZE = 7
-public const val MAX_PLAYERS = 4
-public const val MIN_PLAYERS = 2
+const val BOARD_SIZE = 15
+const val RACK_SIZE = 7
+const val MAX_PLAYERS = 4
+const val MIN_PLAYERS = 2
 
 fun main() {
     ScrabbleForm()
@@ -47,11 +51,11 @@ class ScrabbleForm : JFrame("Scrabble") {
             addLetters(this, 'Z', 1)
         }
     }
-    private val validWords: ArrayList<String> = arrayListOf()
+    private val racks = arrayListOf<Rack>()
+    var currentRack: Rack? = null
+    var currentTurn = 0
 
     var board = Board(this)
-    var playerOne: Player
-    var playerOneRack: Rack
     var confirm = JButton()
 
     val hasTilePressed
@@ -60,17 +64,24 @@ class ScrabbleForm : JFrame("Scrabble") {
     val hasRackedPressed
         get() = pressedRack != null
 
+    private fun play() {
+        currentRack?.toggle(true)
+    }
+
     fun addLetters(arr: MutableList<Char>, c: Char, amount: Int) {
         for (i in 0 until amount) {
             arr.add(c)
         }
     }
 
-
-
-    fun confirmMove() {
-        board.enableAllButtons(true)
+    private fun confirmMove() {
+        currentTurn++
+        board.toggleEmptyTiles(true)
         board.validateWords(tilesPlaced)
+
+        println("Points: ${currentRack?.player?.points}")
+
+        currentRack = nextRack()
 
         tilesPlaced.clear()
         tilesSearched.addAll(tilesPlaced)
@@ -91,16 +102,17 @@ class ScrabbleForm : JFrame("Scrabble") {
     }
 
     fun placeTile() {
+        pressedTile?.turnPlaced = currentTurn
         pressedTile?.let { tilesPlaced.add(it) }
         pressedTile?.text = pressedRack?.buttonPressed?.text
 
         // Disable buttons depending on how many tiles has been placed
         when (tilesPlaced.size) {
             1 -> {
-                board.enableAllButtons(false)
+                board.toggleEmptyTiles(false)
                 tilesPlaced[0].coordinates?.let {
-                    board.enableButtons(Board.Orientation.Horizontal, it)
-                    board.enableButtons(Board.Orientation.Vertical, it)
+                    board.enableOrientation(Board.Orientation.Horizontal, it)
+                    board.enableOrientation(Board.Orientation.Vertical, it)
                 }
             }
             2 -> {
@@ -116,15 +128,23 @@ class ScrabbleForm : JFrame("Scrabble") {
             else -> pressedTile?.orientation = orientation
         }
 
-        pressedRack?.fill()
         removeRack(true)
         removeTile()
     }
 
+    private fun nextRack(): Rack {
+        currentRack?.toggle(false)
+        currentRack?.fill()
+        val currentRackIndex = racks.indexOf(currentRack)
+        val nextRack = racks[(currentRackIndex + 1) % racks.size]
+        nextRack.toggle(true)
+        return nextRack
+    }
+
     private fun addOrientation(orientation: Board.Orientation) {
         this.orientation = orientation
-        board.enableAllButtons(false)
-        board.enableButtons(orientation, tilesPlaced[0].coordinates!!)
+        board.toggleEmptyTiles(false)
+        tilesPlaced[0].coordinates?.let { board.enableOrientation(orientation, it) }
         for (tile in tilesPlaced) {
             tile.orientation = orientation
         }
@@ -138,23 +158,38 @@ class ScrabbleForm : JFrame("Scrabble") {
 
     init {
         availableLetters.shuffle()
-        playerOne = Player(Color.GREEN, 1)
-        playerOneRack = HorizontalRack(playerOne, this)
+        racks.add(HorizontalRack(Player(Color.RED), this))
+        racks.add(VerticalRack(Player(Color.ORANGE), this))
+        racks.add(VerticalRack(Player(Color.GREEN), this))
+        racks.add(HorizontalRack(Player(Color.BLUE), this))
+        currentRack = racks.first()
+
+        contentPane.layout = GridLayout(4, 1)
+        preferredSize = Dimension(500, 510)
 
         confirm.text = "Confirm Move"
         confirm.addActionListener { _ -> confirmMove() }
 
-        playerOneRack.preferredSize = Dimension(500, 10)
-        preferredSize = Dimension(500, 510)
+        val first = JPanel(FlowLayout(FlowLayout.CENTER))
+        first.add(racks[0])
 
-        contentPane.layout = GridLayout(3, 1)
+        val second = JPanel(FlowLayout(FlowLayout.CENTER))
+        second.preferredSize = Dimension(350, 300)
+        second.add(racks[1])
+        second.add(board)
+        second.add(racks[2])
 
-        contentPane.add(board)
-        contentPane.add(playerOneRack)
+        val third = JPanel(FlowLayout(FlowLayout.CENTER))
+        third.add(racks[3])
+
+        contentPane.add(first)
+        contentPane.add(second)
+        contentPane.add(third)
         contentPane.add(confirm)
 
         defaultCloseOperation = EXIT_ON_CLOSE
         pack()
         isVisible = true
+        play()
     }
 }

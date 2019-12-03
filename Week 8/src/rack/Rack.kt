@@ -18,6 +18,7 @@ abstract class Rack(
 
     init {
         fill()
+        toggle(false)
     }
 
     fun fill() {
@@ -36,9 +37,16 @@ abstract class Rack(
         return result
     }
 
+    fun toggle(enabled: Boolean) {
+        for(button in buttons) {
+            button.isEnabled = enabled
+        }
+    }
+
     private fun addButton(letter: Letter) {
         val button = JButton()
         button.text = letter.character.toString()
+        button.isEnabled = false
         buttons.add(button)
         add(button)
 

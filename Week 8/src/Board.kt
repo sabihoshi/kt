@@ -17,7 +17,6 @@ class Board(val parent: ScrabbleForm) : JPanel() {
     enum class Orientation { Vertical, Horizontal }
 
     val tiles = ArrayList<ArrayList<Tile>>()
-    val player = ArrayList<Player>()
 
     private val tileFactory = TileFactory(parent)
 
@@ -26,17 +25,17 @@ class Board(val parent: ScrabbleForm) : JPanel() {
         initTiles()
     }
 
-    fun enableAllButtons(isEnabled: Boolean = true) {
+    fun toggleEmptyTiles(isEnabled: Boolean = true) {
         for (row in tiles) {
             for (tile in row) {
-                if(tile.text == "") tile.isEnabled = isEnabled
+                tile.isEnabled = if(tile.text == "") isEnabled else tile.turnPlaced == parent.currentTurn
             }
         }
     }
 
-    fun enableButtons(orientation: Orientation, coordinates: Pair<Int, Int>) {
+    fun enableOrientation(orientation: Orientation, coordinates: Pair<Int, Int>) {
         for (tile in getTiles(orientation, coordinates)) {
-            if(tile.text == "") tile.isEnabled = true
+            tile.isEnabled = if(tile.text == "") true else tile.turnPlaced == parent.currentTurn
         }
     }
 
@@ -46,16 +45,22 @@ class Board(val parent: ScrabbleForm) : JPanel() {
         for(letter in letters) {
             if(letter.coordinates != null && letter.orientation != null) {
                 val validate = SearchNode(this, letter.coordinates!!, letter.orientation!!)
-                validate.search()
-                validate.extraNode()
+                val extra = validate.extraNode()
 
-                if(!nodes.contains(validate.triple))
-                {
-                    nodes[validate.triple] = validate
-                    println("${validate.min} - ${validate.max}: ${validate.getWords().first}&${validate.getWords().second}, ${validate.orientation}")
-                }
+                validateNode(validate)
+                validateNode(extra)
             }
         }
+    }
+
+    private fun validateNode(node: SearchNode): Pair<String, Int>? {
+        var ret: Pair<String, Int>? = null
+        if (!nodes.contains(node.triple)) {
+            nodes[node.triple] = node
+            ret = node.getWord()
+            parent.currentRack?.player?.points = parent.currentRack?.player?.points?.plus(ret.second)!!
+        }
+        return ret
     }
 
     fun getTiles(orientation: Orientation, coordinates: Pair<Int, Int>) = sequence {

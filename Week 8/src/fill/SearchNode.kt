@@ -9,9 +9,10 @@ class SearchNode(val board: Board, var start: Pair<Int, Int>, val orientation: B
     }
 
 
+
     var min: Pair<Int, Int> = start
     var max: Pair<Int, Int> = start
-    var triple = Triple(start, start, orientation)
+    val triple
         get() = Triple(min, max, orientation)
 
     fun seekGenerator(direction: Direction, start: Pair<Int, Int>) = sequence {
@@ -31,7 +32,19 @@ class SearchNode(val board: Board, var start: Pair<Int, Int>, val orientation: B
         }
     }
 
-    fun search() {
+    private fun coordinateGenerator() = sequence {
+        if (orientation == Board.Orientation.Horizontal) {
+            for (i in min.second..max.second) {
+                yield(Pair(start.first, i))
+            }
+        } else {
+            for (i in min.first..max.first) {
+                yield(Pair(i, start.second))
+            }
+        }
+    }
+
+    private fun search() {
         if (orientation == Board.Orientation.Vertical) {
             // adjust the start and end Up and Down
             val upGenerator = seekGenerator(Direction.Up, start)
@@ -48,23 +61,28 @@ class SearchNode(val board: Board, var start: Pair<Int, Int>, val orientation: B
 
     }
 
-    // Words have forward and backward
-    fun getWords(): Pair<String, String> {
+    fun getWord(): Pair<String, Int> {
         val sb = StringBuilder()
+        var points = 0
+        var wordMultiplier = 1
 
-        if (orientation == Board.Orientation.Horizontal) {
-            for (i in min.second..max.second) {
-                sb.append(board.tiles[start.first][i].text)
-            }
-        } else {
-            for (i in min.first..max.first) {
-                sb.append(board.tiles[i][start.second].text)
-            }
+        for(coordinate in coordinateGenerator()) {
+            val tile = getTile(coordinate)
+            val char = getChar(coordinate)
+            sb.append(char)
+            wordMultiplier *= wordMultiplier
+            points += getPoints(char) * tile.letterMultiplier
         }
 
-        val ret = sb.toString()
-        return Pair(ret, ret.reversed())
+        points *= wordMultiplier
+        val word = sb.toString()
+
+        return Pair(word, points)
     }
+
+    private fun getChar(coordinate: Pair<Int, Int>) = getTile(coordinate).text.first()
+
+    private fun getTile(coordinate: Pair<Int, Int>) = board.tiles[coordinate.first][coordinate.second]
 
     private fun reverse(orientation: Board.Orientation): Board.Orientation {
         return if (orientation == Board.Orientation.Vertical) Board.Orientation.Horizontal
@@ -73,7 +91,7 @@ class SearchNode(val board: Board, var start: Pair<Int, Int>, val orientation: B
 
     private fun modifyLeft(coordinates: Sequence<Pair<Int, Int>>) {
         for (coordinate in coordinates) {
-            if (board.tiles[coordinate.first][coordinate.second].text != "") {
+            if (getTile(coordinate).text != "") {
                 min = Pair(coordinate.first, coordinate.second)
             } else break
         }
@@ -81,19 +99,30 @@ class SearchNode(val board: Board, var start: Pair<Int, Int>, val orientation: B
 
     private fun modifyRight(coordinates: Sequence<Pair<Int, Int>>) {
         for (coordinate in coordinates) {
-            if (board.tiles[coordinate.first][coordinate.second].text != "") {
+            if (getTile(coordinate).text != "") {
                 max = Pair(coordinate.first, coordinate.second)
             } else break
         }
     }
 
-    fun extraNode() {
-        val node = SearchNode(board, start, reverse(orientation))
-        node.search()
-        if (!board.nodes.contains(node.triple) && node.getWords().toList().all { w -> w.length > 1 }) {
-            board.nodes[node.triple] = node
-            println("EXTRA NODE: ${node.min} - ${node.max}: ${node.getWords().first}&${node.getWords().second}, ${node.orientation}")
-        }
+    fun extraNode(): SearchNode {
+        return SearchNode(board, start, reverse(orientation))
+    }
+
+    fun getPoints(char: Char) = points.single { p -> p.first.contains(char) }.second
+
+    private val points = arrayOf(
+        Pair(arrayOf('A', 'E', 'I', 'L', 'N', 'O', 'R', 'S', 'T', 'U'), 1),
+        Pair(arrayOf('D', 'G'), 2),
+        Pair(arrayOf('B', 'C', 'M', 'P'), 3),
+        Pair(arrayOf('F', 'H', 'V', 'W', 'Y'), 4),
+        Pair(arrayOf('K'), 5),
+        Pair(arrayOf('J', 'X'), 8),
+        Pair(arrayOf('Q', 'Z'), 10)
+    )
+
+    init {
+        search()
     }
 }
 

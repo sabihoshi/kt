@@ -19,27 +19,32 @@ class TileFactory(val parent: ScrabbleForm) {
     }
 }
 
-class Tile(val color: Color, val wordMultiplier: Int, val letterMultiplier: Int, val parent: ScrabbleForm) : JButton() {
+class Tile(color: Color, private val word: Int, private val letter: Int, val parent: ScrabbleForm) : JButton() {
     var coordinates: Pair<Int, Int>? = null
     var orientation: Board.Orientation? = null
-    private var isMultiplierUnused = true
+    var turnPlaced: Int? = null
+    private var isLetterUsed = false
+    private var isWordUsed = false
 
-    fun getLetterMult(): Int {
-        if (isMultiplierUnused) return letterMultiplier
-        else {
-            this.isMultiplierUnused = false
-            return 1
+    val letterMultiplier: Int
+        get() {
+            var ret = 1
+            if (!isLetterUsed) {
+                isLetterUsed = true
+                ret = letter
+            }
+            return ret
         }
-    }
 
-    fun getLetterPoints(input: String, c: Char): Int {
-        val points = points.first { p -> p.first.contains(c.toUpperCase()) }.second
-        return if (isMultiplierUnused) points
-        else {
-
-            points * getLetterMult()
+    val wordMultiplier: Int
+        get() {
+            var ret = 1
+            if (!isWordUsed) {
+                isWordUsed = true
+                ret = word
+            }
+            return ret
         }
-    }
 
     constructor(color: String, wordMultiplier: Int, letterMultiplier: Int, parent: ScrabbleForm) : this(
         Color.decode(color),
@@ -63,14 +68,4 @@ class Tile(val color: Color, val wordMultiplier: Int, val letterMultiplier: Int,
             }
         }
     }
-
-    private val points = arrayOf(
-        Pair(arrayOf('A', 'E', 'I', 'L', 'N', 'O', 'R', 'S', 'T', 'U'), 1),
-        Pair(arrayOf('D', 'G'), 2),
-        Pair(arrayOf('B', 'C', 'M', 'P'), 3),
-        Pair(arrayOf('F', 'H', 'V', 'W', 'Y'), 4),
-        Pair(arrayOf('K'), 5),
-        Pair(arrayOf('J', 'X'), 8),
-        Pair(arrayOf('Q', 'Z'), 10)
-    )
 }
