@@ -1,11 +1,8 @@
-
 import rack.HorizontalRack
 import rack.Rack
 import rack.VerticalRack
-import java.awt.Color
-import java.awt.Dimension
-import java.awt.FlowLayout
-import java.awt.GridLayout
+import java.awt.*
+import javax.swing.BoxLayout
 import javax.swing.JButton
 import javax.swing.JFrame
 import javax.swing.JPanel
@@ -103,6 +100,11 @@ class ScrabbleForm : JFrame("Scrabble") {
 
     fun placeTile() {
         pressedTile?.turnPlaced = currentTurn
+        if (pressedTile?.text != "") {
+            val temp = pressedTile?.text
+            pressedTile?.text = pressedRack?.buttonPressed?.text
+            pressedRack?.buttonPressed?.text = temp
+        }
         pressedTile?.let { tilesPlaced.add(it) }
         pressedTile?.text = pressedRack?.buttonPressed?.text
 
@@ -158,34 +160,72 @@ class ScrabbleForm : JFrame("Scrabble") {
 
     init {
         availableLetters.shuffle()
-        racks.add(HorizontalRack(Player(Color.RED), this))
-        racks.add(VerticalRack(Player(Color.ORANGE), this))
-        racks.add(VerticalRack(Player(Color.GREEN), this))
-        racks.add(HorizontalRack(Player(Color.BLUE), this))
+        racks.add(HorizontalRack(Player(Color.RED, "1"), this))
+        racks.add(VerticalRack(Player(Color.ORANGE, "2"), this))
+        racks.add(VerticalRack(Player(Color.GREEN, "3"), this))
+        racks.add(HorizontalRack(Player(Color.BLUE, "4"), this))
         currentRack = racks.first()
 
-        contentPane.layout = GridLayout(4, 1)
+        val scores = JPanel()
+        scores.layout = BoxLayout(scores, BoxLayout.PAGE_AXIS)
+        racks.forEach {
+            scores.add(it.player.scoreField)
+        }
+        contentPane.layout = GridBagLayout()
+        val c = GridBagConstraints()
+
         preferredSize = Dimension(500, 510)
 
         confirm.text = "Confirm Move"
         confirm.addActionListener { _ -> confirmMove() }
 
-        val first = JPanel(FlowLayout(FlowLayout.CENTER))
-        first.add(racks[0])
+        fun reset() {
+            c.ipadx = 0
+            c.ipady = 0
+            c.insets = Insets(0, 0, 0, 0)
+            c.weightx = 0.0
+            c.weighty = 0.0
+        }
 
-        val second = JPanel(FlowLayout(FlowLayout.CENTER))
-        second.preferredSize = Dimension(350, 300)
-        second.add(racks[1])
-        second.add(board)
-        second.add(racks[2])
+        c.fill = GridBagConstraints.HORIZONTAL
+        c.gridx = 1
+        c.gridy = 0
+        val top = JPanel()
+        top.add(racks[0])
+        contentPane.add(top, c)
 
-        val third = JPanel(FlowLayout(FlowLayout.CENTER))
-        third.add(racks[3])
+        c.fill = GridBagConstraints.HORIZONTAL
+        c.gridx = 0
+        c.gridy = 1
+        contentPane.add(racks[1], c)
 
-        contentPane.add(first)
-        contentPane.add(second)
-        contentPane.add(third)
-        contentPane.add(confirm)
+        c.fill = GridBagConstraints.HORIZONTAL
+        c.gridx = 1
+        c.gridy = 1
+        c.insets = Insets(10, 10, 10, 10)
+        c.ipadx = 500
+        c.ipady = 500
+        c.weightx = 1.0
+        c.weighty = 1.0
+        contentPane.add(board, c)
+        reset()
+
+        c.fill = GridBagConstraints.HORIZONTAL
+        c.gridx = 2
+        c.gridy = 1
+        contentPane.add(racks[2], c)
+
+        c.fill = GridBagConstraints.HORIZONTAL
+        c.gridx = 1
+        c.gridy = 2
+        val bottom = JPanel()
+        bottom.add(racks[3])
+        contentPane.add(bottom, c)
+
+        c.fill = GridBagConstraints.HORIZONTAL
+        c.gridx = 1
+        c.gridy = 3
+        contentPane.add(confirm, c)
 
         defaultCloseOperation = EXIT_ON_CLOSE
         pack()

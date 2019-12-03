@@ -7,6 +7,7 @@ import javax.swing.JPanel
 
 
 class Board(val parent: ScrabbleForm) : JPanel() {
+
     enum class Direction {
         Down,
         Across,

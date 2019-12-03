@@ -19,41 +19,43 @@ class TileFactory(val parent: ScrabbleForm) {
     }
 }
 
-class Tile(color: Color, private val word: Int, private val letter: Int, val parent: ScrabbleForm) : JButton() {
+class Tile(color: Color, wordMultiplier: Int, letterMultiplier: Int, private val parent: ScrabbleForm) : JButton() {
     var coordinates: Pair<Int, Int>? = null
     var orientation: Board.Orientation? = null
     var turnPlaced: Int? = null
     private var isLetterUsed = false
     private var isWordUsed = false
 
-    val letterMultiplier: Int
+    var letterMultiplier: Int = 1
         get() {
             var ret = 1
             if (!isLetterUsed) {
                 isLetterUsed = true
-                ret = letter
+                ret = field
             }
             return ret
         }
 
-    val wordMultiplier: Int
+    var wordMultiplier: Int = 1
         get() {
             var ret = 1
             if (!isWordUsed) {
                 isWordUsed = true
-                ret = word
+                ret = field
             }
             return ret
         }
 
     constructor(color: String, wordMultiplier: Int, letterMultiplier: Int, parent: ScrabbleForm) : this(
-        Color.decode(color),
-        wordMultiplier,
-        letterMultiplier,
-        parent
+            Color.decode(color),
+            wordMultiplier,
+            letterMultiplier,
+            parent
     )
 
     init {
+        this.letterMultiplier = letterMultiplier
+        this.wordMultiplier = wordMultiplier
         background = color
         addActionListener { e ->
             val button = e.source as JButton
