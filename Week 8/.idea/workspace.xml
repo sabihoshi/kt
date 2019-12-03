@@ -3,10 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="9315392b-85e6-4f91-a728-4e4cc3a82d13" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Board.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/Board.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Player.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/Player.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/ScrabbleForm.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/ScrabbleForm.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Tile.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/Tile.kt" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -141,7 +138,7 @@
       <workItem from="1575178816345" duration="17149000" />
       <workItem from="1575215065480" duration="7828000" />
       <workItem from="1575264526574" duration="59395000" />
-      <workItem from="1575389403511" duration="4033000" />
+      <workItem from="1575389403511" duration="7331000" />
     </task>
     <servers />
   </component>

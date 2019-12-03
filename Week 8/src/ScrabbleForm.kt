@@ -180,6 +180,7 @@ class ScrabbleForm : JFrame("Scrabble") {
         confirm.addActionListener { _ -> confirmMove() }
 
         fun reset() {
+            c.fill = GridBagConstraints.CENTER
             c.ipadx = 0
             c.ipady = 0
             c.insets = Insets(0, 0, 0, 0)
@@ -187,19 +188,23 @@ class ScrabbleForm : JFrame("Scrabble") {
             c.weighty = 0.0
         }
 
-        c.fill = GridBagConstraints.HORIZONTAL
-        c.gridx = 1
-        c.gridy = 0
         val top = JPanel()
         top.add(racks[0])
+        c.gridx = 1
+        c.gridy = 0
+        c.weighty = 0.5
         contentPane.add(top, c)
+        reset()
 
-        c.fill = GridBagConstraints.HORIZONTAL
+        val left = JPanel()
+        left.add(racks[1])
         c.gridx = 0
         c.gridy = 1
-        contentPane.add(racks[1], c)
+        c.weightx = 0.5
+        contentPane.add(left, c)
+        reset()
 
-        c.fill = GridBagConstraints.HORIZONTAL
+        c.fill = GridBagConstraints.BASELINE
         c.gridx = 1
         c.gridy = 1
         c.insets = Insets(10, 10, 10, 10)
@@ -210,22 +215,26 @@ class ScrabbleForm : JFrame("Scrabble") {
         contentPane.add(board, c)
         reset()
 
-        c.fill = GridBagConstraints.HORIZONTAL
+        val right = JPanel()
+        right.add(racks[2])
         c.gridx = 2
         c.gridy = 1
-        contentPane.add(racks[2], c)
+        c.weightx = 0.5
+        contentPane.add(right, c)
+        reset()
 
-        c.fill = GridBagConstraints.HORIZONTAL
-        c.gridx = 1
-        c.gridy = 2
         val bottom = JPanel()
         bottom.add(racks[3])
+        c.gridx = 1
+        c.gridy = 2
+        c.weighty = 0.5
         contentPane.add(bottom, c)
+        reset()
 
-        c.fill = GridBagConstraints.HORIZONTAL
         c.gridx = 1
         c.gridy = 3
         contentPane.add(confirm, c)
+        reset()
 
         defaultCloseOperation = EXIT_ON_CLOSE
         pack()
