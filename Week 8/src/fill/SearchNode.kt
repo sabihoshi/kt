@@ -11,7 +11,8 @@ class SearchNode(val board: Board, var start: Pair<Int, Int>, val orientation: B
 
     var min: Pair<Int, Int> = start
     var max: Pair<Int, Int> = start
-    var triple = Triple(start.first, start.second, orientation)
+    var triple = Triple(start, start, orientation)
+        get() = Triple(min, max, orientation)
 
     fun seekGenerator(direction: Direction, start: Pair<Int, Int>) = sequence {
         when (direction) {
@@ -51,12 +52,12 @@ class SearchNode(val board: Board, var start: Pair<Int, Int>, val orientation: B
     fun getWords(): Pair<String, String> {
         val sb = StringBuilder()
 
-        if(orientation == Board.Orientation.Horizontal) {
-            for(i in min.second..max.second) {
+        if (orientation == Board.Orientation.Horizontal) {
+            for (i in min.second..max.second) {
                 sb.append(board.tiles[start.first][i].text)
             }
         } else {
-            for(i in min.first..max.first) {
+            for (i in min.first..max.first) {
                 sb.append(board.tiles[i][start.second].text)
             }
         }
@@ -67,14 +68,13 @@ class SearchNode(val board: Board, var start: Pair<Int, Int>, val orientation: B
 
     private fun reverse(orientation: Board.Orientation): Board.Orientation {
         return if (orientation == Board.Orientation.Vertical) Board.Orientation.Horizontal
-        else Board.Orientation.Horizontal
+        else Board.Orientation.Vertical
     }
 
     private fun modifyLeft(coordinates: Sequence<Pair<Int, Int>>) {
         for (coordinate in coordinates) {
             if (board.tiles[coordinate.first][coordinate.second].text != "") {
                 min = Pair(coordinate.first, coordinate.second)
-                addNode(min, orientation)
             } else break
         }
     }
@@ -83,18 +83,16 @@ class SearchNode(val board: Board, var start: Pair<Int, Int>, val orientation: B
         for (coordinate in coordinates) {
             if (board.tiles[coordinate.first][coordinate.second].text != "") {
                 max = Pair(coordinate.first, coordinate.second)
-                addNode(max, reverse(orientation))
             } else break
         }
     }
 
-    private fun addNode(coordinate: Pair<Int, Int>, orientation: Board.Orientation) {
-        board.nodes[Triple(coordinate.first, coordinate.second, orientation)] = this
-        val node = SearchNode(board, coordinate, reverse(orientation))
-        if(!board.nodes.contains(node.triple)) {
+    fun extraNode() {
+        val node = SearchNode(board, start, reverse(orientation))
+        node.search()
+        if (!board.nodes.contains(node.triple) && node.getWords().toList().all { w -> w.length > 1 }) {
             board.nodes[node.triple] = node
-            node.search()
-            println("EXTRA NODE: ${node.min} - ${node.max}: ${node.getWords().first}&${node.getWords().second}")
+            println("EXTRA NODE: ${node.min} - ${node.max}: ${node.getWords().first}&${node.getWords().second}, ${node.orientation}")
         }
     }
 }

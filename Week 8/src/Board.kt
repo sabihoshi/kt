@@ -40,17 +40,22 @@ class Board(val parent: ScrabbleForm) : JPanel() {
         }
     }
 
-    var nodes = HashMap<Triple<Int, Int, Orientation>, SearchNode>()
+    var nodes = HashMap<Triple<Pair<Int, Int>, Pair<Int, Int>, Orientation>, SearchNode>()
 
     fun validateWords(letters: ArrayList<Tile>) {
         for(letter in letters) {
             if(letter.coordinates != null && letter.orientation != null) {
                 val validate = SearchNode(this, letter.coordinates!!, letter.orientation!!)
                 validate.search()
-                println("${validate.min} - ${validate.max}: ${validate.getWords().first}&${validate.getWords().second}")
+                validate.extraNode()
+
+                if(!nodes.contains(validate.triple))
+                {
+                    nodes[validate.triple] = validate
+                    println("${validate.min} - ${validate.max}: ${validate.getWords().first}&${validate.getWords().second}, ${validate.orientation}")
+                }
             }
         }
-        println("================================")
     }
 
     fun getTiles(orientation: Orientation, coordinates: Pair<Int, Int>) = sequence {

@@ -4,12 +4,7 @@
     <list default="true" id="9315392b-85e6-4f91-a728-4e4cc3a82d13" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Board.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/Board.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/ScrabbleForm.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/ScrabbleForm.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Tile.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/Tile.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/fill/SearchNode.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/fill/SearchNode.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/rack/HorizontalRack.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/rack/HorizontalRack.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/rack/Rack.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/rack/Rack.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/rack/VerticalRack.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/rack/VerticalRack.kt" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -142,7 +137,7 @@
       <workItem from="1575168503255" duration="6512000" />
       <workItem from="1575178816345" duration="17149000" />
       <workItem from="1575215065480" duration="7828000" />
-      <workItem from="1575264526574" duration="22645000" />
+      <workItem from="1575264526574" duration="31802000" />
     </task>
     <servers />
   </component>
@@ -167,6 +162,7 @@
       <configuration name="JetRunConfigurationType">
         <watch expression="letters.map { l -&gt; Pair(l.coordinates, l.orientation) }" language="kotlin" />
         <watch expression="board.nodes" language="kotlin" />
+        <watch expression="board.tiles[coordinate.first][coordinate.second].text" language="kotlin" />
       </configuration>
     </watches-manager>
   </component>
