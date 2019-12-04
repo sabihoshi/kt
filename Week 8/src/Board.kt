@@ -6,13 +6,6 @@ import javax.swing.JPanel
 
 class Board(val parent: ScrabbleForm) : JPanel() {
 
-    enum class Direction {
-        Down,
-        Across,
-        Upwards,
-        Backwards
-    }
-
     enum class Orientation { Vertical, Horizontal }
 
     val tiles = ArrayList<ArrayList<Tile>>()

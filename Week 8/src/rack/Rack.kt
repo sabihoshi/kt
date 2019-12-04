@@ -52,8 +52,9 @@ abstract class Rack(
 
         button.addActionListener { e ->
             val source = e.source as JButton
-            parent.removeRack()
-            if (parent.pressedRack != this) {
+            if (parent.pressedRack == this) {
+                parent.resetRack(false)
+            } else {
                 buttonPressed = source
                 parent.pressedRack = this
                 source.border = LineBorder(Color.CYAN)

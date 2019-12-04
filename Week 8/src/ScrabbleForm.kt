@@ -79,7 +79,7 @@ class ScrabbleForm : JFrame("Scrabble") {
     private fun confirmMove() {
         val result = board.validateWords(tilesPlaced)
         if (!result.first) {
-            reset()
+            clear()
             return
         }
         currentTurn++
@@ -91,12 +91,12 @@ class ScrabbleForm : JFrame("Scrabble") {
         tilesPlaced.clear()
     }
 
-    fun removeTile() {
+    fun resetTile() {
         pressedTile?.border = LineBorder(Color.GRAY)
         pressedTile = null
     }
 
-    fun removeRack(delete: Boolean = false) {
+    fun resetRack(delete: Boolean = false) {
         if (delete) {
             pressedRack?.buttons?.remove(pressedRack?.buttonPressed)
             pressedRack?.remove(pressedRack?.buttonPressed)
@@ -106,11 +106,18 @@ class ScrabbleForm : JFrame("Scrabble") {
     }
 
     fun placeTile() {
+        confirm.isEnabled = true
+        reset.isEnabled = true
+
         pressedTile?.turnPlaced = currentTurn
         if (pressedTile?.text != "") {
             val temp = pressedTile?.text
             pressedTile?.text = pressedRack?.buttonPressed?.text
             pressedRack?.buttonPressed?.text = temp
+
+            resetTile()
+            resetRack(false)
+            return
         }
         pressedTile?.let { tilesPlaced.add(it) }
         pressedTile?.text = pressedRack?.buttonPressed?.text
@@ -137,17 +144,20 @@ class ScrabbleForm : JFrame("Scrabble") {
             else -> pressedTile?.orientation = orientation
         }
 
-        removeRack(true)
-        removeTile()
+        resetRack(true)
+        resetTile()
     }
 
-    private fun reset() {
+    private fun clear() {
         for (tile in tilesPlaced) {
             currentRack?.addButton(tile.text.firstOrNull() ?: ' ', true)
             tile.text = ""
         }
         tilesPlaced.clear()
         board.toggleEmptyTiles(true)
+
+        reset.isEnabled = false
+        confirm.isEnabled = false
     }
 
     private fun nextRack(): Rack {
@@ -246,7 +256,7 @@ class ScrabbleForm : JFrame("Scrabble") {
         confirm.text = "Confirm Move"
         confirm.addActionListener { confirmMove() }
         reset.text = "Reset"
-        reset.addActionListener { reset() }
+        reset.addActionListener { clear() }
         boardButtons.add(confirm)
         boardButtons.add(reset)
         c.gridx = 1
@@ -260,6 +270,8 @@ class ScrabbleForm : JFrame("Scrabble") {
         racks.forEach {
             scores.add(it.player.scoreField)
         }
+        c.weightx = 1.0
+        c.insets = Insets(10, 10, 10, 10)
         c.gridx = 3
         c.gridy = 0
         c.gridheight = 3

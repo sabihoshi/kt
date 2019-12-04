@@ -10,4 +10,7 @@ class Player(val color: Color, val name: String) {
         }
     var rack: Rack? = null
     val scoreField = JLabel()
+    init {
+        points = 0
+    }
 }
