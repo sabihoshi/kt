@@ -44,8 +44,8 @@ class Board(val parent: ScrabbleForm) : JPanel() {
         val word = arrayListOf<Pair<String, Int>>()
         val extraWords = arrayListOf<Pair<String, Int>>()
         for (letter in letters) {
-            if (letter.coordinates != null && letter.orientation != null) {
-                val validate = SearchNode(this, letter.coordinates!!, letter.orientation!!)
+            if (letter.coordinates != null) {
+                val validate = SearchNode(this, letter.coordinates!!, letter.orientation ?: Orientation.Horizontal)
                 val extra = validate.extraNode()
 
                 validateNode(validate)?.let { word.add(it) }
@@ -53,7 +53,7 @@ class Board(val parent: ScrabbleForm) : JPanel() {
             }
         }
         if (word.size != 1) return Pair(false, 0)
-        val result = extraWords.all { w -> parent.validWords.contains(w.first.toLowerCase()) } && parent.validWords.contains(word.first().first.toLowerCase())
+        val result = extraWords.all { w -> parent.validWords.contains(w.first) } && parent.validWords.contains(word.first().first)
         val points = extraWords.map { w -> w.second }.sum() + word.first().second
         return Pair(result, points)
     }

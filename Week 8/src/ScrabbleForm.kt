@@ -179,7 +179,7 @@ class ScrabbleForm : JFrame("Scrabble") {
         board.toggleEmptyTiles(false)
         board.tiles[7][7].isEnabled = true
 
-        val inputStream: InputStream = File(Paths.get(".\\src\\words\\words_alpha.txt").toAbsolutePath().toString()).inputStream()
+        val inputStream: InputStream = File(Paths.get(".\\src\\words\\collins_scrabble.txt").toAbsolutePath().toString()).inputStream()
         inputStream.bufferedReader().useLines { lines -> lines.forEach { validWords.add(it) } }
 
         // Initialize players
@@ -194,12 +194,6 @@ class ScrabbleForm : JFrame("Scrabble") {
         preferredSize = Dimension(500, 510)
         contentPane.layout = GridBagLayout()
         var c = GridBagConstraints()
-
-        val scores = JPanel()
-        scores.layout = BoxLayout(scores, BoxLayout.PAGE_AXIS)
-        racks.forEach {
-            scores.add(it.player.scoreField)
-        }
 
         fun reset() {
             c = GridBagConstraints()
@@ -259,6 +253,17 @@ class ScrabbleForm : JFrame("Scrabble") {
         c.gridy = 3
         contentPane.add(boardButtons, c)
         reset()
+
+        // Scoreboard and Info
+        val scores = JPanel()
+        scores.layout = BoxLayout(scores, BoxLayout.PAGE_AXIS)
+        racks.forEach {
+            scores.add(it.player.scoreField)
+        }
+        c.gridx = 3
+        c.gridy = 0
+        c.gridheight = 3
+        contentPane.add(scores, c)
 
         defaultCloseOperation = EXIT_ON_CLOSE
         pack()

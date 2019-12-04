@@ -5,7 +5,6 @@
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Board.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/Board.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/ScrabbleForm.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/ScrabbleForm.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/fill/SearchNode.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/fill/SearchNode.kt" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -156,7 +155,7 @@
       <workItem from="1575264526574" duration="59395000" />
       <workItem from="1575389403511" duration="7332000" />
       <workItem from="1575449420587" duration="8547000" />
-      <workItem from="1575459452342" duration="1838000" />
+      <workItem from="1575459452342" duration="4478000" />
     </task>
     <servers />
   </component>
