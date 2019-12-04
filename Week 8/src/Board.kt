@@ -50,7 +50,7 @@ class Board(val parent: ScrabbleForm) : JPanel() {
             }
         }
         val result = extraWords.all { w -> parent.validWords.contains(w.first) } && parent.validWords.contains(word.firstOrNull()?.first ?: false ) && word.size == 1
-        val points = extraWords.map { w -> w.second }.sum() + word.first().second
+        val points = extraWords.map { w -> w.second }.sum() + (word.firstOrNull()?.second ?: 0)
         if (!result) {
             nodesFound.forEach { nodes.remove(it.triple) }
         }
