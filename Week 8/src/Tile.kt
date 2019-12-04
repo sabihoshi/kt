@@ -56,12 +56,14 @@ class Tile(color: Color, wordMultiplier: Int, letterMultiplier: Int, private val
     init {
         this.letterMultiplier = letterMultiplier
         this.wordMultiplier = wordMultiplier
+        this.text = " "
         background = color
         addActionListener { e ->
             val button = e.source as JButton
             if (parent.pressedTile == this) {
                 parent.resetTile()
             } else {
+                parent.resetTile()
                 parent.pressedTile = this
                 button.border = LineBorder(Color.CYAN)
 

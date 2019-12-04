@@ -20,20 +20,21 @@ class Board(val parent: ScrabbleForm) : JPanel() {
     fun toggleEmptyTiles(isEnabled: Boolean = true) {
         for (row in tiles) {
             for (tile in row) {
-                tile.isEnabled = if (tile.text == "") isEnabled else tile.turnPlaced == parent.currentTurn
+                tile.isEnabled = if (tile.text.isNullOrBlank()) isEnabled else tile.turnPlaced == parent.currentTurn
             }
         }
     }
 
     fun enableOrientation(orientation: Orientation, coordinates: Pair<Int, Int>) {
         for (tile in getTiles(orientation, coordinates)) {
-            tile.isEnabled = if (tile.text == "") true else tile.turnPlaced == parent.currentTurn
+            tile.isEnabled = if (tile.text.isNullOrBlank()) true else tile.turnPlaced == parent.currentTurn
         }
     }
 
     private var nodes = HashMap<Triple<Pair<Int, Int>, Pair<Int, Int>, Orientation>, SearchNode>()
 
     fun validateWords(letters: ArrayList<Tile>): Pair<Boolean, Int> {
+        val nodesFound = arrayListOf<SearchNode>()
         val word = arrayListOf<Pair<String, Int>>()
         val extraWords = arrayListOf<Pair<String, Int>>()
         for (letter in letters) {
@@ -41,13 +42,18 @@ class Board(val parent: ScrabbleForm) : JPanel() {
                 val validate = SearchNode(this, letter.coordinates!!, letter.orientation ?: Orientation.Horizontal)
                 val extra = validate.extraNode()
 
+                nodesFound.add(validate)
+                nodesFound.add(extra)
+
                 validateNode(validate)?.let { word.add(it) }
                 validateNode(extra)?.let { extraWords.add(it) }
             }
         }
-        if (word.size != 1) return Pair(false, 0)
-        val result = extraWords.all { w -> parent.validWords.contains(w.first) } && parent.validWords.contains(word.first().first)
+        val result = extraWords.all { w -> parent.validWords.contains(w.first) } && parent.validWords.contains(word.firstOrNull()?.first ?: false ) && word.size == 1
         val points = extraWords.map { w -> w.second }.sum() + word.first().second
+        if (!result) {
+            nodesFound.forEach { nodes.remove(it.triple) }
+        }
         return Pair(result, points)
     }
 

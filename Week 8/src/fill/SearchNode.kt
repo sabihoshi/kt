@@ -91,7 +91,7 @@ class SearchNode(val board: Board, var start: Pair<Int, Int>, val orientation: B
 
     private fun modifyLeft(coordinates: Sequence<Pair<Int, Int>>) {
         for (coordinate in coordinates) {
-            if (getTile(coordinate).text != "") {
+            if (getTile(coordinate).text.isNotBlank()) {
                 min = Pair(coordinate.first, coordinate.second)
             } else break
         }
@@ -99,7 +99,7 @@ class SearchNode(val board: Board, var start: Pair<Int, Int>, val orientation: B
 
     private fun modifyRight(coordinates: Sequence<Pair<Int, Int>>) {
         for (coordinate in coordinates) {
-            if (getTile(coordinate).text != "") {
+            if (getTile(coordinate).text.isNotBlank()) {
                 max = Pair(coordinate.first, coordinate.second)
             } else break
         }

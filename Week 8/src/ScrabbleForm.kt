@@ -110,7 +110,7 @@ class ScrabbleForm : JFrame("Scrabble") {
         reset.isEnabled = true
 
         pressedTile?.turnPlaced = currentTurn
-        if (pressedTile?.text != "") {
+        if (!pressedTile?.text.isNullOrBlank()) {
             val temp = pressedTile?.text
             pressedTile?.text = pressedRack?.buttonPressed?.text
             pressedRack?.buttonPressed?.text = temp
@@ -151,10 +151,14 @@ class ScrabbleForm : JFrame("Scrabble") {
     private fun clear() {
         for (tile in tilesPlaced) {
             currentRack?.addButton(tile.text.firstOrNull() ?: ' ', true)
-            tile.text = ""
+            tile.text = " "
         }
         tilesPlaced.clear()
-        board.toggleEmptyTiles(true)
+        if (currentTurn == 0) {
+            onlyMiddle()
+        } else {
+            board.toggleEmptyTiles(true)
+        }
 
         reset.isEnabled = false
         confirm.isEnabled = false
@@ -186,8 +190,7 @@ class ScrabbleForm : JFrame("Scrabble") {
 
     init {
         // Initialize board
-        board.toggleEmptyTiles(false)
-        board.tiles[7][7].isEnabled = true
+        onlyMiddle()
 
         val inputStream: InputStream = File(Paths.get(".\\src\\words\\collins_scrabble.txt").toAbsolutePath().toString()).inputStream()
         inputStream.bufferedReader().useLines { lines -> lines.forEach { validWords.add(it) } }
@@ -281,5 +284,10 @@ class ScrabbleForm : JFrame("Scrabble") {
         pack()
         isVisible = true
         play()
+    }
+
+    private fun onlyMiddle() {
+        board.toggleEmptyTiles(false)
+        board.tiles[7][7].isEnabled = true
     }
 }

@@ -55,6 +55,7 @@ abstract class Rack(
             if (parent.pressedRack == this) {
                 parent.resetRack(false)
             } else {
+                parent.resetRack(false)
                 buttonPressed = source
                 parent.pressedRack = this
                 source.border = LineBorder(Color.CYAN)
