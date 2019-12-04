@@ -49,10 +49,7 @@ class Board(val parent: ScrabbleForm) : JPanel() {
                 val extra = validate.extraNode()
 
                 validateNode(validate)?.let { word.add(it) }
-                validateNode(extra)?.let {
-                    if (it.first.length > 1)
-                        extraWords.add(it)
-                }
+                validateNode(extra)?.let { extraWords.add(it) }
             }
         }
         if (word.size != 1) return Pair(false, 0)
@@ -62,12 +59,12 @@ class Board(val parent: ScrabbleForm) : JPanel() {
     }
 
     private fun validateNode(node: SearchNode): Pair<String, Int>? {
-        var ret: Pair<String, Int>? = null
         if (!nodes.contains(node.triple)) {
             nodes[node.triple] = node
-            ret = node.getWord()
+            val word = node.getWord()
+            return if (word.first.length > 1) word else null
         }
-        return ret
+        return null
     }
 
     fun getTiles(orientation: Orientation, coordinates: Pair<Int, Int>) = sequence {

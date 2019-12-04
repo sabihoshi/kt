@@ -71,7 +71,7 @@ class SearchNode(val board: Board, var start: Pair<Int, Int>, val orientation: B
             val char = getChar(coordinate)
             sb.append(char)
             wordMultiplier *= wordMultiplier
-            points += getPoints(char) * tile.letterMultiplier
+            points += char?.let { getPoints(it) }?.times(tile.letterMultiplier) ?: 0
         }
 
         points *= wordMultiplier
@@ -80,7 +80,7 @@ class SearchNode(val board: Board, var start: Pair<Int, Int>, val orientation: B
         return Pair(word, points)
     }
 
-    private fun getChar(coordinate: Pair<Int, Int>) = getTile(coordinate).text.first()
+    private fun getChar(coordinate: Pair<Int, Int>) = getTile(coordinate).text.firstOrNull()
 
     private fun getTile(coordinate: Pair<Int, Int>) = board.tiles[coordinate.first][coordinate.second]
 

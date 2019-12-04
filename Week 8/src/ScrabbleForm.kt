@@ -88,9 +88,7 @@ class ScrabbleForm : JFrame("Scrabble") {
         println("Points: ${currentRack?.player?.points}")
 
         currentRack = nextRack()
-
         tilesPlaced.clear()
-        tilesSearched.addAll(tilesPlaced)
     }
 
     fun removeTile() {
@@ -148,6 +146,8 @@ class ScrabbleForm : JFrame("Scrabble") {
             currentRack?.addButton(tile.text.firstOrNull() ?: ' ', true)
             tile.text = ""
         }
+        tilesPlaced.clear()
+        board.toggleEmptyTiles(true)
     }
 
     private fun nextRack(): Rack {
@@ -170,7 +170,6 @@ class ScrabbleForm : JFrame("Scrabble") {
     }
 
     private var orientation: Board.Orientation? = null
-    private var tilesSearched: ArrayList<Tile> = arrayListOf()
     private var tilesPlaced: ArrayList<Tile> = arrayListOf()
     var pressedTile: Tile? = null
     var pressedRack: Rack? = null
