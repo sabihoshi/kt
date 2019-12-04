@@ -2,6 +2,9 @@ import rack.HorizontalRack
 import rack.Rack
 import rack.VerticalRack
 import java.awt.*
+import java.io.File
+import java.io.InputStream
+import java.nio.file.Paths
 import javax.swing.BoxLayout
 import javax.swing.JButton
 import javax.swing.JFrame
@@ -18,6 +21,7 @@ fun main() {
 }
 
 class ScrabbleForm : JFrame("Scrabble") {
+    var validWords = arrayListOf<String>()
     val availableLetters = object : ArrayList<Char>() {
         init {
             addLetters(this, 'A', 9)
@@ -54,6 +58,7 @@ class ScrabbleForm : JFrame("Scrabble") {
 
     var board = Board(this)
     var confirm = JButton()
+    var reset = JButton()
 
     val hasTilePressed
         get() = pressedTile != null
@@ -72,10 +77,14 @@ class ScrabbleForm : JFrame("Scrabble") {
     }
 
     private fun confirmMove() {
+        val result = board.validateWords(tilesPlaced)
+        if (!result.first) {
+            reset()
+            return
+        }
         currentTurn++
         board.toggleEmptyTiles(true)
-        board.validateWords(tilesPlaced)
-
+        currentRack?.player?.points = currentRack?.player?.points?.plus(result.second)!!
         println("Points: ${currentRack?.player?.points}")
 
         currentRack = nextRack()
@@ -134,12 +143,20 @@ class ScrabbleForm : JFrame("Scrabble") {
         removeTile()
     }
 
+    private fun reset() {
+        for (tile in tilesPlaced) {
+            currentRack?.addButton(tile.text.firstOrNull() ?: ' ', true)
+            tile.text = ""
+        }
+    }
+
     private fun nextRack(): Rack {
         currentRack?.toggle(false)
         currentRack?.fill()
         val currentRackIndex = racks.indexOf(currentRack)
         val nextRack = racks[(currentRackIndex + 1) % racks.size]
         nextRack.toggle(true)
+
         return nextRack
     }
 
@@ -159,6 +176,14 @@ class ScrabbleForm : JFrame("Scrabble") {
     var pressedRack: Rack? = null
 
     init {
+        // Initialize board
+        board.toggleEmptyTiles(false)
+        board.tiles[7][7].isEnabled = true
+
+        val inputStream: InputStream = File(Paths.get(".\\src\\words\\words_alpha.txt").toAbsolutePath().toString()).inputStream()
+        inputStream.bufferedReader().useLines { lines -> lines.forEach { validWords.add(it) } }
+
+        // Initialize players
         availableLetters.shuffle()
         racks.add(HorizontalRack(Player(Color.RED, "1"), this))
         racks.add(VerticalRack(Player(Color.ORANGE, "2"), this))
@@ -166,26 +191,19 @@ class ScrabbleForm : JFrame("Scrabble") {
         racks.add(HorizontalRack(Player(Color.BLUE, "4"), this))
         currentRack = racks.first()
 
+        // Initialize layout
+        preferredSize = Dimension(500, 510)
+        contentPane.layout = GridBagLayout()
+        var c = GridBagConstraints()
+
         val scores = JPanel()
         scores.layout = BoxLayout(scores, BoxLayout.PAGE_AXIS)
         racks.forEach {
             scores.add(it.player.scoreField)
         }
-        contentPane.layout = GridBagLayout()
-        val c = GridBagConstraints()
-
-        preferredSize = Dimension(500, 510)
-
-        confirm.text = "Confirm Move"
-        confirm.addActionListener { _ -> confirmMove() }
 
         fun reset() {
-            c.fill = GridBagConstraints.CENTER
-            c.ipadx = 0
-            c.ipady = 0
-            c.insets = Insets(0, 0, 0, 0)
-            c.weightx = 0.0
-            c.weighty = 0.0
+            c = GridBagConstraints()
         }
 
         val top = JPanel()
@@ -204,14 +222,14 @@ class ScrabbleForm : JFrame("Scrabble") {
         contentPane.add(left, c)
         reset()
 
-        c.fill = GridBagConstraints.BASELINE
+        c.fill = GridBagConstraints.REMAINDER
         c.gridx = 1
         c.gridy = 1
         c.insets = Insets(10, 10, 10, 10)
         c.ipadx = 500
         c.ipady = 500
-        c.weightx = 1.0
-        c.weighty = 1.0
+        c.weightx = 2.0
+        c.weighty = 2.0
         contentPane.add(board, c)
         reset()
 
@@ -231,9 +249,16 @@ class ScrabbleForm : JFrame("Scrabble") {
         contentPane.add(bottom, c)
         reset()
 
+        val boardButtons = JPanel(FlowLayout(FlowLayout.CENTER))
+        confirm.text = "Confirm Move"
+        confirm.addActionListener { confirmMove() }
+        reset.text = "Reset"
+        reset.addActionListener { reset() }
+        boardButtons.add(confirm)
+        boardButtons.add(reset)
         c.gridx = 1
         c.gridy = 3
-        contentPane.add(confirm, c)
+        contentPane.add(boardButtons, c)
         reset()
 
         defaultCloseOperation = EXIT_ON_CLOSE

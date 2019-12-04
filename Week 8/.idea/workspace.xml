@@ -2,8 +2,13 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="9315392b-85e6-4f91-a728-4e4cc3a82d13" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/kotlin_events_v2_0.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Week 8.iml" beforeDir="false" afterPath="$PROJECT_DIR$/Week 8.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Board.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/Board.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/ScrabbleForm.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/ScrabbleForm.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/rack/Letter.kt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/rack/Rack.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/rack/Rack.kt" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -19,8 +24,8 @@
       <list>
         <option value="Gradle Kotlin DSL Build Script" />
         <option value="Kotlin File" />
-        <option value="Kotlin Class" />
         <option value="Class" />
+        <option value="Kotlin Class" />
       </list>
     </option>
   </component>
@@ -48,7 +53,7 @@
     <property name="project.structure.side.proportion" value="0.2" />
     <property name="restartRequiresConfirmation" value="false" />
     <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
-    <property name="settings.editor.selected.configurable" value="preferences.sourceCode.Kotlin" />
+    <property name="settings.editor.selected.configurable" value="preferences.sourceCode.Java" />
   </component>
   <component name="RecentsManager">
     <key name="MoveKotlinTopLevelDeclarationsDialog.RECENTS_KEY">
@@ -109,9 +114,23 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="TestKt" type="JetRunConfigurationType" factoryName="Kotlin" temporary="true" nameIsGenerated="true">
+      <module name="Week 8" />
+      <option name="VM_PARAMETERS" />
+      <option name="PROGRAM_PARAMETERS" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="MAIN_CLASS_NAME" value="TestKt" />
+      <option name="WORKING_DIRECTORY" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <recent_temporary>
       <list>
         <item itemvalue="Kotlin.ScrabbleFormKt" />
+        <item itemvalue="Kotlin.TestKt" />
         <item itemvalue="Kotlin.FooKt" />
         <item itemvalue="Application.ScrabbleForm" />
         <item itemvalue="Application.Scrabble" />
@@ -138,7 +157,8 @@
       <workItem from="1575178816345" duration="17149000" />
       <workItem from="1575215065480" duration="7828000" />
       <workItem from="1575264526574" duration="59395000" />
-      <workItem from="1575389403511" duration="7331000" />
+      <workItem from="1575389403511" duration="7332000" />
+      <workItem from="1575449420587" duration="8547000" />
     </task>
     <servers />
   </component>
@@ -159,6 +179,15 @@
     </option>
   </component>
   <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="kotlin-line">
+          <url>file://$PROJECT_DIR$/src/ScrabbleForm.kt</url>
+          <line>79</line>
+          <option name="timeStamp" value="4" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
     <watches-manager>
       <configuration name="JetRunConfigurationType">
         <watch expression="letters.map { l -&gt; Pair(l.coordinates, l.orientation) }" language="kotlin" />
